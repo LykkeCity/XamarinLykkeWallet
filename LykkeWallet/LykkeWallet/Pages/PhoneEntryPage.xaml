@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LykkeWallet.Pages.PhoneEntryPage"
+             Title="Lykke Wallet">
+  <StackLayout Padding="20, 80, 20, 20"
+               VerticalOptions="Start">
+    <Label x:Name="infoLabel"
+           VerticalOptions="Start"
+           HorizontalOptions="Center"
+           FontSize="Large"
+           HorizontalTextAlignment="Center"
+           Text="Enter your phone number"/>
+    <Frame Padding="20, 20, 20, 0">
+      <Label x:Name="countryLabel"
+            VerticalOptions="Start"
+            HorizontalOptions="Center"
+            FontSize="Large"/>
+    </Frame>
+    <Frame Padding="20, 20, 20, 0">
+      <Button x:Name="countrySelectorButton"
+            VerticalOptions="Start"
+            HorizontalOptions="Center"
+            FontSize="Medium"
+            Text="Change Country"
+            Clicked="OnCountrySelectorButtonClicked" />
+    </Frame>
+    <Frame Padding="20, 20, 20, 0">
+      <StackLayout Orientation="Horizontal" BackgroundColor="Gray">
+        <Frame Padding="8, 10, 0, 0">
+          <Label x:Name="prefixLabel" Text="+995 |" FontSize="Large" BackgroundColor="Transparent" />
+        </Frame>
+        <Entry x:Name="phoneEntry"
+            Keyboard="Telephone"
+            Placeholder="Phone number"
+            VerticalOptions="Start"
+            HorizontalOptions="FillAndExpand"
+            FontSize="Large"
+            TextChanged="OnPhoneChanged"/>
+      </StackLayout>
+    </Frame>
+    <Frame Padding="20,20,20,0">
+      <Button x:Name="submitButton"
+        Text="Next"
+        VerticalOptions="Start"
+        HorizontalOptions="FillAndExpand"
+        HeightRequest="70"
+        FontSize="Large"
+        IsEnabled="False"
+        Clicked="OnSubmitButtonClicked"/>
+    </Frame>
+  </StackLayout>
+
+</ContentPage>

@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:lykkeWallet="clr-namespace:LykkeWallet;assembly=LykkeWallet"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.LoginPage"
+             Title="Lykke Wallet">
+    <ContentPage.Resources>
+      <ResourceDictionary>
+        <converters:LoginEmailValidationToBooleanConverter x:Key="loginEmailValidationToBooleanConverter" />
+      </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentView>
+    <StackLayout Padding="20, 80, 20, 20"
+                 VerticalOptions="Start">
+      <Image x:Name="img"
+             Source="{lykkeWallet:ImageResource LykkeWallet.Images.lykkeLight@3x.png}"
+             VerticalOptions="Start"
+             HorizontalOptions="FillAndExpand" />
+      <Frame Padding="20,40,20,0">
+        <Entry x:Name="mailEntry"
+               Keyboard="Email"
+               Placeholder="Email"
+               VerticalOptions="Start"
+               HorizontalOptions="FillAndExpand"
+               FontSize="Large" />
+      </Frame>
+      <Frame Padding="20,10,20,0">
+        <Button x:Name="submitButton"
+                Text="Sign up"
+                VerticalOptions="Start"
+                HorizontalOptions="FillAndExpand"
+                HeightRequest="70"
+                FontSize="Large"
+                IsEnabled="False"/>
+        <!--{Binding Source={x:Reference mailEntry},
+                                    Path=Text,
+                                    Converter={StaticResource loginEmailValidationToBooleanConverter}}-->
+      </Frame>
+      <Frame Padding="20,10,20,0">
+        <Label x:Name="currentApiLabel"
+                Text=""
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                FontSize="Medium"/>
+      </Frame>
+      <Frame Padding="20,10,20,0">
+        <Button x:Name="changeApiButton"
+                Text="Change server"
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                FontSize="Medium"
+                HeightRequest="50"
+                IsEnabled="True"
+                Clicked="OnApiSelectorClicked"/>
+      </Frame>
+    </StackLayout>
+  </ContentView>
+</ContentPage>
