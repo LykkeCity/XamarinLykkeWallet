@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:lykkeWallet="clr-namespace:LykkeWallet;assembly=LykkeWallet"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
+             xmlns:customUi="clr-namespace:LykkeWallet.CustomUI;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.LoginPage"
+             Title="Lykke Wallet">
+    <ContentPage.Resources>
+      <ResourceDictionary>
+        <converters:MailExistsToButtonTextConverter x:Key="mailExistsToButtonTextConverter" />
+        <converters:MailExistsToButtonEnabledConverter x:Key="mailExistsToButtonEnabledConverter" />
+        <viewModels:LoginPageViewModel x:Key="loginPageViewModel" x:Name="loginPageViewModel"/>
+      </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentView >
+      <StackLayout Padding="20, 50, 20, 20"
+                   VerticalOptions="Start"
+                   BindingContext="{StaticResource loginPageViewModel}">
+        <Image x:Name="img"
+               Source="{lykkeWallet:ImageResource LykkeWallet.Images.lykkeLight@3x.png}"
+               VerticalOptions="Start"
+               HorizontalOptions="FillAndExpand" />
+        <Frame Padding="20,40,20,0">
+          <Entry x:Name="mailEntry"
+                 Keyboard="Email"
+                 Placeholder="Email"
+                 VerticalOptions="Start"
+                 HorizontalOptions="FillAndExpand"
+                 FontSize="Medium"
+                 TextChanged="OnTextChanged"
+                 Completed="VirtualClick"/>
+        </Frame>
+        <Frame Padding="20,10,20,0">
+          <Button x:Name="submitButton"
+                  Text="{Binding MailStatus, Mode=OneWay, Converter={StaticResource mailExistsToButtonTextConverter}}"
+                  VerticalOptions="Start"
+                  HorizontalOptions="FillAndExpand"
+                  HeightRequest="60"
+                  FontSize="Medium"
+                  IsEnabled="{Binding MailStatus, Mode=OneWay, Converter={StaticResource mailExistsToButtonEnabledConverter}}"/>
+
+        </Frame>
+        <Frame Padding="20,10,20,0">
+          <customUi:BindablePicker x:Name="serverPicker"
+                                   Title="Select API Server"
+                                   ItemsSource="{Binding ApiServerList}"
+                                   SelectedItem="{Binding ApiServer}"/>
+        </Frame>
+      </StackLayout>
+  </ContentView>
+</ContentPage>

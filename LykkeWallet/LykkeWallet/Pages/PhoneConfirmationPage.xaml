@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.PhoneConfirmationPage"
+             Title="Lykke Wallet">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:PhoneCodeValidationConverter x:Key="phoneCodeValidationConverter" />
+      <viewModels:PhoneConfirmationPageViewModel x:Key="phoneConfirmationPageViewModel" x:Name="phoneConfirmationPageViewModel" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <StackLayout Padding="20, 50, 20, 20"
+               VerticalOptions="Start"
+               BindingContext="{StaticResource phoneConfirmationPageViewModel}">
+    <Frame Padding="20, 20, 20, 0">
+      <Label x:Name="infoLabel"
+                 VerticalOptions="Start"
+                 HorizontalOptions="Center"
+                 FontSize="Medium"
+                 HorizontalTextAlignment="Center"
+                 Text="{Binding Phone, Mode=OneWay, StringFormat='We\'ve sent the code to your phone {0}'}"/>
+    </Frame>
+    <Frame Padding="20, 20, 20, 0">
+      <Entry x:Name="codeEntry"
+          Keyboard="Numeric"
+          Placeholder="Code"
+          VerticalOptions="Start"
+          HorizontalOptions="FillAndExpand"
+          FontSize="Medium"
+             Completed="VirtualClick"/>
+    </Frame>
+    <Frame Padding="20,20,20,0">
+      <Button x:Name="submitButton"
+              Text="Confirm"
+              VerticalOptions="Start"
+              HorizontalOptions="FillAndExpand"
+              HeightRequest="60"
+              FontSize="Medium"
+              IsEnabled="{Binding Source={x:Reference codeEntry},
+                                    Path=Text,
+                                    Converter={StaticResource phoneCodeValidationConverter}}"
+              Clicked="OnSubmitButtonClicked"/>
+    </Frame>
+    <Label x:Name="codeResendLabel"
+           VerticalOptions="Start"
+           HorizontalOptions="Center"
+           FontSize="Medium"
+           TextColor="Aqua"
+           HorizontalTextAlignment="Center"
+           Text="Haven't received the code?"/>
+  </StackLayout>
+</ContentPage>
