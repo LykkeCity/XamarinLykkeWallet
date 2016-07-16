@@ -14,9 +14,40 @@ namespace LykkeWallet.Pages
         {
             if (requirePin)
             {
-                Navigation.PushModalAsync(new PinEntryPage());
+                Navigation.PushModalAsync(new PinEntryPage(this));
             }
             InitializeComponent();
+
+        }
+
+        public void InitializeChildren()
+        {
+            try
+            {
+                var walletPage = new WalletPage();
+                walletPage.RefreshData();
+
+                var exchangePage = new ExchangePage();
+                exchangePage.RefreshButtons();
+                exchangePage.RefreshData();
+                exchangePage.RefreshDataOnNextAppearing = false;
+
+                var settingsPage = new SettingsPage();
+                settingsPage.RefreshData();
+
+                Children.Add(walletPage);
+                Children.Add(exchangePage);
+                Children.Add(settingsPage);
+            }
+            catch (Exception ex)
+            {
+                var a = 33;;
+            }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            return base.OnBackButtonPressed();
         }
     }
 }

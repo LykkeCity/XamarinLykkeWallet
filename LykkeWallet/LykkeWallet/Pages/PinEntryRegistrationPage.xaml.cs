@@ -26,6 +26,7 @@ namespace LykkeWallet.Pages
             submitButton.Clicked -= OnSubmitButtonClicked;
             await WalletApiSingleton.Instance.SetPinCodeAsync(pinEntry.Text);
             //Navigation.PushAsync();
+            var loginPage = (LoginPage)App.Current.MainPage.Navigation.NavigationStack.First();
             submitButton.Clicked += OnSubmitButtonClicked;
             Navigation.PopToRootAsync();
         }

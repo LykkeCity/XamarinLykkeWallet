@@ -20,9 +20,9 @@ namespace LykkeWallet.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            //codeEntry.Focus();
+            codeEntry.Focus();
         }
-
+        
         private async void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             submitButton.Clicked -= OnSubmitButtonClicked;
@@ -40,6 +40,8 @@ namespace LykkeWallet.Pages
 
             submitButton.Clicked += OnSubmitButtonClicked;
         }
+
+        
 
         private void VirtualClick(object sender, EventArgs e)
         {

@@ -27,8 +27,6 @@ namespace LykkeWallet.Pages
             submitButton.Clicked += OnSubmitButton;
 
             serverPicker.SelectedIndex = 1;
-
-
         }
 
         protected override void OnAppearing()
@@ -38,13 +36,16 @@ namespace LykkeWallet.Pages
             {
                 Navigation.PushAsync(new MainTabbedPage(true));
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(mailEntry.Text))
+                {
+                    OnTextChanged(null, null);
+                }
+            }
 
             base.OnAppearing();
 
-            if (!string.IsNullOrEmpty(mailEntry.Text))
-            {
-                OnTextChanged(null, null);
-            }
 
         }
 

@@ -40,6 +40,8 @@
     <Compile Include="ApiAccess\Models.cs" />
     <Compile Include="ApiAccess\WalletApiSingleton.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="Converters\DecimalPercentagetToStringConverter.cs" />
+    <Compile Include="Converters\DecimalRateToStringConverter.cs" />
     <Compile Include="Converters\ImageSourceToButtonEnabledConverter.cs" />
     <Compile Include="Converters\MailExistsToButtonEnabledConverter.cs" />
     <Compile Include="Converters\MailExistsToButtonTextConverter.cs" />
@@ -47,10 +49,19 @@
     <Compile Include="Converters\EmailCodeValidationConverter.cs" />
     <Compile Include="Converters\PinToButtonEnabledConverter.cs" />
     <Compile Include="CustomUI\BindablePicker.cs" />
+    <Compile Include="CustomUI\ExchangeCell.cs" />
     <Compile Include="CustomUI\PhoneCodeCell.cs" />
+    <Compile Include="CustomUI\SmartListView.cs" />
+    <Compile Include="CustomUI\WalletCell.cs" />
     <Compile Include="LocalKeyStorageAccess\LocalKeyStorage.cs" />
     <Compile Include="Pages\AuthentificationPage.xaml.cs">
       <DependentUpon>AuthentificationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BaseAssetSelectionPage.xaml.cs">
+      <DependentUpon>BaseAssetSelectionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ExchangeDetailsPage.xaml.cs">
+      <DependentUpon>ExchangeDetailsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ExchangePage.xaml.cs">
       <DependentUpon>ExchangePage.xaml</DependentUpon>
@@ -63,6 +74,9 @@
     </Compile>
     <Compile Include="Pages\MyLykkePage.xaml.cs">
       <DependentUpon>MyLykkePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PersonalDataInfoPage.xaml.cs">
+      <DependentUpon>PersonalDataInfoPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\PinEntryPage.xaml.cs">
       <DependentUpon>PinEntryPage.xaml</DependentUpon>
@@ -115,6 +129,7 @@
     <Compile Include="Utils\DateTimeUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="ViewModels\AuthentificationPageViewModel.cs" />
+    <Compile Include="ViewModels\ExchangePageViewModel.cs" />
     <Compile Include="ViewModels\PinEntryRegistrationPageViewModel.cs" />
     <Compile Include="ViewModels\PhoneConfirmationPageViewModel.cs" />
     <Compile Include="ViewModels\EmailConfirmPageViewModel.cs" />
@@ -281,6 +296,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Pages\PinEntryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\PersonalDataInfoPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\BaseAssetSelectionPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\ExchangeDetailsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

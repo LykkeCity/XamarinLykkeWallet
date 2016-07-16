@@ -39,7 +39,7 @@ namespace LykkeWallet.Pages
             try
             {
                 var result = await WalletApiSingleton.Instance.AuthAsync(ViewModel.Email, ViewModel.Password);
-                Navigation.PushAsync(new MainTabbedPage(false));
+                Navigation.PushAsync(new MainTabbedPage(true));
             }
             catch (InvalidUsernameOrPasswordException ex)
             {

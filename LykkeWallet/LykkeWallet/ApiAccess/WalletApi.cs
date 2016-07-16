@@ -127,5 +127,34 @@ namespace LykkeWallet.ApiAccess
             return result;
         }
 
+        public Task<WalletRespModel> GetWallets()
+        {
+            var result = DoGetRequestAsync<WalletRespModel>("Wallets");
+            return result;
+        }
+
+        public Task<AssetPairRatesRespModel> GetAssetPairRates()
+        {
+            return DoGetRequestAsync<AssetPairRatesRespModel>("AssetPairRates");
+        }
+
+        public Task<AssetPairRatesRespModel> GetAssetPairRates(string id)
+        {
+            return DoGetRequestAsync<AssetPairRatesRespModel>("AssetPairRates", new {Id = id});
+        }
+
+        public Task<BaseAssetRespModel> GetBaseAsset()
+        {
+            return DoGetRequestAsync<BaseAssetRespModel>("BaseAsset");
+        }
+        public Task SetBaseAsset(string id)
+        {
+            return DoPostRequestAsync("BaseAsset", new { Id = id });
+        }
+
+        public Task<AllBaseAssetsRespModel> GetAllBaseAssets()
+        {
+            return DoGetRequestAsync<AllBaseAssetsRespModel>("BaseAssets");
+        }
     }
 }

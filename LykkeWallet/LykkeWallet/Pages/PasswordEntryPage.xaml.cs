@@ -22,7 +22,7 @@ namespace LykkeWallet.Pages
             base.OnAppearing();
             passwordEntry.Focus();
         }
-
+        
         private void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             submitButton.Clicked -= OnSubmitButtonClicked;

@@ -10,8 +10,11 @@ namespace LykkeWallet.Pages
 {
     public partial class PinEntryPage : ContentPage
     {
-        public PinEntryPage()
+        private MainTabbedPage _mainTabbedPage;
+        public PinEntryPage(MainTabbedPage mainTabbedPage)
         {
+            _mainTabbedPage = mainTabbedPage;
+
             InitializeComponent();
         }
 
@@ -35,6 +38,8 @@ namespace LykkeWallet.Pages
             var resp = await WalletApiSingleton.Instance.CheckPinCodeAsync(pinEntry.Text);
             if (resp.Passed)
             {
+                _mainTabbedPage.InitializeChildren();
+                
                 Navigation.PopModalAsync();
             }
             else

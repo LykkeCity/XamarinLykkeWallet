@@ -15,9 +15,6 @@ namespace LykkeWallet.ApiAccess
         {
         }
 
-        public static WalletApi Instance
-        {
-            get { return _instance; }
-        }
+        public static WalletApi Instance => _instance;
     }
 }

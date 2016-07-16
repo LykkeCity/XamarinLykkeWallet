@@ -4,9 +4,10 @@
              xmlns:pages="clr-namespace:LykkeWallet.Pages;assembly=LykkeWallet"
              x:Class="LykkeWallet.Pages.MainTabbedPage"
              Title="Lykke Wallet">
+  <!--
   <pages:WalletPage />
   <pages:ExchangePage />
   <pages:HistoryPage />
   <pages:MyLykkePage />
-  <pages:SettingsPage />
+  <pages:SettingsPage />-->
 </TabbedPage>

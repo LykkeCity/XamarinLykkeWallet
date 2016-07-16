@@ -27,6 +27,13 @@ namespace LykkeWallet.Pages
             hintEntry.Focus();
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            Navigation.PopToRootAsync();
+            return base.OnBackButtonPressed();
+        }
+
+
         private async void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             await WalletApiSingleton.Instance.RegisterAccount(_email, "", "", _password, hintEntry.Text, "");
