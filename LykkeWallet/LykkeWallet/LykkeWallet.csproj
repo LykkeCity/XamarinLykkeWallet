@@ -53,6 +53,7 @@
     <Compile Include="CustomUI\PhoneCodeCell.cs" />
     <Compile Include="CustomUI\SmartListView.cs" />
     <Compile Include="CustomUI\WalletCell.cs" />
+    <Compile Include="Json\JsonCustomDateTimeConverter.cs" />
     <Compile Include="LocalKeyStorageAccess\LocalKeyStorage.cs" />
     <Compile Include="Pages\AuthentificationPage.xaml.cs">
       <DependentUpon>AuthentificationPage.xaml</DependentUpon>
@@ -129,6 +130,7 @@
     <Compile Include="Utils\DateTimeUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="ViewModels\AuthentificationPageViewModel.cs" />
+    <Compile Include="ViewModels\ExchangeDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\ExchangePageViewModel.cs" />
     <Compile Include="ViewModels\PinEntryRegistrationPageViewModel.cs" />
     <Compile Include="ViewModels\PhoneConfirmationPageViewModel.cs" />
@@ -317,6 +319,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\ic_call_made.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.0.0.6482\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.0.0.6482\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />

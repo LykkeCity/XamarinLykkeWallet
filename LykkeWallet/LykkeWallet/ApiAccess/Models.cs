@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LykkeWallet.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace LykkeWallet.ApiAccess
 {
@@ -125,5 +128,39 @@ namespace LykkeWallet.ApiAccess
         public string Symbol { set; get; }
         public bool HideWithdraw { set; get; }
         public bool HideDeposit { set; get; }
+    }
+
+    public class AssetDescriptionRespModel
+    {
+        public string Id { set; get; }
+        public string AssetClass { set; get; }
+        public int PopIndex { set; get; }
+        public string Description { set; get; }
+        public string Issuer { set; get; }
+        public string NumberOfCoins { set; get; }
+        public string MarketCapitalization { set; get; }
+        public string AssetDescriptionUrl { set; get; }
+    }
+
+    public class AssetPairDetailedRateRespModel
+    {
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime FixingTime { set; get; }
+
+        public decimal LastPrice { set; get; }
+        public AssetPairDetailRateItemRespModel Rate { set; get; }
+        public bool Inverted { set; get; }
+
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime StartTime { set; get; }
+
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime EndTime { set; get; }
+    }
+
+    public class AssetPairDetailRateItemRespModel
+    {
+        public decimal PChange { set; get; }
+        public List<double> ChngGrph { set; get; }
     }
 }

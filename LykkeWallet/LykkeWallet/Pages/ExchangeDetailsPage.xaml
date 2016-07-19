@@ -1,6 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:lykkeWallet="clr-namespace:LykkeWallet;assembly=LykkeWallet"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
              x:Class="LykkeWallet.Pages.ExchangeDetailsPage">
-  <Label Text="{Binding MainText}" VerticalOptions="Center" HorizontalOptions="Center" />
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <viewModels:ExchangeDetailsPageViewModel x:Key="exchangeDetailsPageViewModel" x:Name="exchangeDetailsPageViewModel"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <StackLayout Padding="15, 20, 15, 0" BindingContext="{StaticResource exchangeDetailsPageViewModel}">
+    <Label FontSize="Large"
+           HorizontalOptions="Start"
+           Text="{Binding AssetPair}"/>
+    <StackLayout Orientation="Horizontal"
+                 Padding="0, 15, 0, 30">
+      <StackLayout HorizontalOptions="Start">
+        <Label FontSize="Small">Last price</Label>
+        <Label FontSize="Large" Text="{Binding LastPrice}" />
+      </StackLayout>
+      <StackLayout HorizontalOptions="EndAndExpand">
+        <Label FontSize="Small">Change</Label>
+        <StackLayout Orientation="Horizontal">
+          <Image x:Name="img"
+                 Source="{lykkeWallet:ImageResource LykkeWallet.Images.ic_call_made.png}"
+                 HorizontalOptions="Start"/>
+          <Frame Padding="5, 0, 5, 5">
+            <Label FontSize="Large"
+                   HorizontalOptions="Start"
+                   Text="{Binding ChangeAmount}"/>
+          </Frame>
+          <Label FontSize="Small"
+                 HorizontalOptions="Start"
+                 VerticalOptions="Center"
+                 Text="{Binding ChangePercentage}"/>
+        </StackLayout>
+      </StackLayout>
+    </StackLayout>
+    <StackLayout x:Name="periodsStack"
+                 Orientation="Horizontal"
+                 HorizontalOptions="FillAndExpand">
+      <Button Text="1 D" WidthRequest="40" HorizontalOptions = "FillAndExpand"></Button>
+      <Button Text="1 M" WidthRequest="40" HorizontalOptions = "FillAndExpand"></Button>
+      <Button Text="6 M" WidthRequest="40" HorizontalOptions = "FillAndExpand"></Button>
+      <Button Text="1 Y" WidthRequest="40" HorizontalOptions = "FillAndExpand"></Button>
+    </StackLayout>
+    <StackLayout Orientation="Horizontal"
+                 HorizontalOptions="FillAndExpand"
+                 Padding="0, 15, 0, 0">
+      <Button Text="{Binding BuyAtPrice, StringFormat='Buy at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
+      <Button Text="{Binding SellAtPrice, StringFormat='Sell at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
+    </StackLayout>
+    <ListView x:Name="assetDataList" ItemsSource="{Binding AssetDetails}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ImageCell
+            Text="{Binding PrimaryText}"
+            Detail="{Binding SecondaryText}"
+            ImageSource="{Binding Image}">
+          </ImageCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </StackLayout>
 </ContentPage>

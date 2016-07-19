@@ -22,6 +22,8 @@ namespace LykkeWallet.CustomUI
 
         public static readonly BindableProperty ExchangeRateProperty = BindableProperty.Create("ExchangeRate", typeof(decimal), typeof(ExchangeCell), decimal.Parse("0"));
 
+        public string Id { set; get; }
+
         public string AssetFrom
         {
             get { return (string)GetValue(AssetFromProperty); }

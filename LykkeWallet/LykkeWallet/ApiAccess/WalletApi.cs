@@ -156,5 +156,20 @@ namespace LykkeWallet.ApiAccess
         {
             return DoGetRequestAsync<AllBaseAssetsRespModel>("BaseAssets");
         }
+
+        public Task<AssetDescriptionRespModel> GetAssetDescription(string id)
+        {
+            return DoGetRequestAsync<AssetDescriptionRespModel>("AssetDescription", new {id});
+        }
+
+        public Task<AssetPairDetailedRateRespModel> GetAssetPairDetailedRates(string assetId, string period, int points)
+        {
+            return DoGetRequestAsync<AssetPairDetailedRateRespModel>("AssetPairDetailedRates", new { period, assetId, points });
+        }
+
+        public Task PostInvertAssetPair(string id, bool inverted)
+        {
+            return DoPostRequestAsync("InvertedAssetPairs", new { AssetPairId = id, Inverted = inverted });
+        }
     }
 }
