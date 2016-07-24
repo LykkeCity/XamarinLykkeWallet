@@ -18,7 +18,7 @@ namespace LykkeWallet.Converters
             else
                 d = (decimal)value;
 
-            return d != 0m ? $"{d:P}" : "0.00%";
+            return d != 0m ? ( d > 0 ? $"+{d/100:P}" : $"{d / 100:P}") : "0.00%";
 
         }
 

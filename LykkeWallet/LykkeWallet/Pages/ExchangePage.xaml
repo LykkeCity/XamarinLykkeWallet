@@ -10,7 +10,7 @@
       <viewModels:ExchangePageViewModel x:Key="exchangePageViewModel" x:Name="exchangePageViewModel"/>
     </ResourceDictionary>
   </ContentPage.Resources>
-  <StackLayout   BindingContext="{StaticResource exchangePageViewModel}">
+  <StackLayout BindingContext="{StaticResource exchangePageViewModel}" AbsoluteLayout.LayoutFlags="All" AbsoluteLayout.LayoutBounds="0,0,1,1">
     <ScrollView Orientation="Horizontal">
       <StackLayout x:Name="buttonsStack"
                    Orientation="Horizontal"
@@ -20,7 +20,7 @@
     <ListView x:Name="exchageRatesListView"  ItemsSource="{Binding ExchangeRates}" ItemTapped="OnPairSelected">
       <ListView.ItemTemplate>
         <DataTemplate>
-          <customUi:ExchangeCell AssetFrom="{Binding AssetFrom, Mode=TwoWay}" AssetTo="{Binding AssetTo, Mode=TwoWay}" ExchangeRate="{Binding ExchangeRate, Mode=TwoWay}" Percentage="{Binding Percentage, Mode=TwoWay}" />
+          <customUi:ExchangeCell AssetFrom="{Binding AssetFrom, Mode=TwoWay}" AssetTo="{Binding AssetTo, Mode=TwoWay}" ExchangeRate="{Binding ExchangeRate, Mode=TwoWay}" Percentage="{Binding Percentage, Mode=TwoWay}" IsInverted="{Binding IsInverted, Mode=TwoWay}" />
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>

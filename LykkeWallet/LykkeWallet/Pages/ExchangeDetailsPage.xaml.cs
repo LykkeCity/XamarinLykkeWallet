@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using LykkeWallet.Annotations;
 using LykkeWallet.ApiAccess;
 using LykkeWallet.ViewModels;
 using Xamarin.Forms;
 
 namespace LykkeWallet.Pages
 {
+
     public class AssetExchangeDetailModel
     {
         public string PrimaryText { set; get; }
@@ -30,7 +35,7 @@ namespace LykkeWallet.Pages
             _periodButtons = new List<Button>();
             foreach (var item in periodsStack.Children)
             {
-                var b = (Button) item;
+                var b = (Button)item;
                 b.Clicked += NewPeriodSelected;
                 _periodButtons.Add(b);
             }
@@ -44,17 +49,10 @@ namespace LykkeWallet.Pages
                 button.Opacity = 0.3;
                 button.BackgroundColor = Color.Transparent;
             }
-            var b = (Button) sender;
+            var b = (Button)sender;
 
             b.Opacity = 1;
             b.BackgroundColor = Color.Default;
-        }
-
-        public void SetPairDetail(string id, decimal ask, decimal bid, decimal changePercentage)
-        {
-            ViewModel.BuyAtPrice = ask;
-            ViewModel.SellAtPrice = bid;
-            ViewModel.ChangePercentage = changePercentage;
         }
 
         public async void SetAssetDescription(string id)
@@ -101,20 +99,51 @@ namespace LykkeWallet.Pages
                         SecondaryText = "Description URL"
                     }
                 };
-                
+
             }
             catch (Exception ex)
             {
                 var a = 234;
             }
         }
-
-        public async void SetAssetPairDetials(string id, string period = "1M", int points = 20)
+        public void RefreshData(string id, string period = "1M", int points = 20)
         {
-            var data = await WalletApiSingleton.Instance.GetAssetPairDetailedRates(id, period, points);
 
-            ViewModel.AssetPair = id;
-            ViewModel.LastPrice = data.LastPrice;
+            Task.Run(
+                () =>
+                {
+                    try
+                    {
+                        var assetPair = WalletApiSingleton.Instance.GetAssetPairRates(id).Result.Rate;
+
+                        var assetPair2 = WalletApiSingleton.Instance.GetAssetPair(id).Result.AssetPair;
+
+                        var assetPair3 = WalletApiSingleton.Instance.GetAssetPairDetailedRates(id, period, points).Result;
+
+                        decimal ask;
+                        bool askParsed = decimal.TryParse(assetPair.Ask, NumberStyles.Any, null, out ask);
+                        decimal bid;
+                        bool bidParsed = decimal.TryParse(assetPair.Bid, NumberStyles.Any, null, out bid);
+
+                        ViewModel.PairId = id;
+                        ViewModel.Ask = askParsed
+                            ? Math.Round(ask, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy)
+                            : 0m;
+                        ViewModel.Bid = bidParsed
+                            ? Math.Round(bid, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy)
+                            : 0m;
+                        ViewModel.Change =
+                            decimal.Parse(
+                                (assetPair3.Rate.ChngGrph.Last() - assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2]).ToString
+                                    ());
+                        ViewModel.Percentage = assetPair3.Rate.PChange;
+                        ViewModel.LastPrice = assetPair3.LastPrice;
+                    }
+                    catch (Exception ex)
+                    {
+                        var a = 234;
+                    }
+                });
         }
     }
 }

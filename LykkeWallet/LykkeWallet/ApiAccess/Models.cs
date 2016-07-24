@@ -100,6 +100,11 @@ namespace LykkeWallet.ApiAccess
         public List<AssetPairRateModel> Rates { set; get; }
     }
 
+    public class AssetPairRateRespModel
+    {
+        public AssetPairRateModel Rate { set; get; }
+    }
+
     public class AssetPairRateModel
     {
         public double PChng { set; get; }
@@ -162,5 +167,22 @@ namespace LykkeWallet.ApiAccess
     {
         public decimal PChange { set; get; }
         public List<double> ChngGrph { set; get; }
+    }
+
+    public class AssetPairRespModel
+    {
+        public AssetPairItemRespModel AssetPair { set; get; }
+    }
+
+    public class AssetPairItemRespModel
+    {
+        public string Group { set; get; }
+        public string Id { set; get; }
+        public string Name { set; get; }
+        public int Accuracy { set; get; }
+        public int InvertedAccuracy { set; get; }
+        public string BaseAssetId { set; get; }
+        public string QuotingAssetId { set; get; }
+        public bool Inverted { set; get; }
     }
 }

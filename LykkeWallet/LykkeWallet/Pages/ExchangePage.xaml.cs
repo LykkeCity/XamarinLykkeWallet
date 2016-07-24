@@ -18,14 +18,36 @@ namespace LykkeWallet.Pages
 {
     public class ExhcangeRateModel : INotifyPropertyChanged
     {
-        private int _accuracy;
-        private int _invertedAccuracy;
+        private readonly int _invertedAccuracy;
+        public int InvertedAccuracy => _invertedAccuracy;
+        private readonly int _regularAccuracy;
+        public int RegularAccuracy => _regularAccuracy;
 
-        public ExhcangeRateModel(string id, int accuracy, int invertedAccuracy)
+        public ExhcangeRateModel(string id, bool isInverted, int regularAccuracy, int invertedAccuracy, decimal ask, decimal bid, decimal percentage)
         {
             Id = id;
-            _accuracy = accuracy;
             _invertedAccuracy = invertedAccuracy;
+            _regularAccuracy = regularAccuracy;
+
+            AssetFrom = isInverted ? id.Substring(3) : id.Substring(0, 3);
+            AssetTo = isInverted ? id.Substring(0, 3) : id.Substring(3);
+
+            if (isInverted)
+            {
+                _invertedAsk = ask;
+                _invertedBid = bid;
+                _invertedPercentage = percentage;
+            }
+            else
+            {
+                _regularAsk = ask;
+                _regularBid = bid;
+                _regularPercentage = percentage;
+            }
+
+            IsInverted = isInverted;
+
+            Evaluate();
         }
 
         public string Id { internal set; get; }
@@ -111,38 +133,28 @@ namespace LykkeWallet.Pages
                     _bid = value;
                     OnPropertyChanged();
                 }
+
             }
         }
 
         private decimal _invertedAsk;
-        public decimal InvertedAsk
-        {
-            get { return _invertedAsk; }
-            set
-            {
-                if (value != _invertedAsk)
-                {
-                    _invertedAsk = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
 
         private decimal _invertedBid;
-        public decimal InvertedBid
-        {
-            get { return _invertedBid; }
-            set
-            {
-                if (value != _invertedBid)
-                {
-                    _invertedBid = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+
+        private decimal _regularAsk;
+
+        private decimal _regularBid;
+
+        private decimal _regularPercentage;
+
+        private decimal _invertedPercentage;
+
+        //private decimal _regularExchangeRate;
+
+        //private decimal _invertedExchangeRate;
 
         private bool _isInverted;
+
         public bool IsInverted
         {
             get { return _isInverted; }
@@ -151,16 +163,67 @@ namespace LykkeWallet.Pages
                 if (value != _isInverted)
                 {
                     _isInverted = value;
+                    Invert();
                     OnPropertyChanged();
-
 
                 }
             }
         }
 
-        private void ReEvaluate()
+        private void Invert()
         {
-            
+            Ask = IsInverted ? _invertedAsk : _regularAsk;
+            Bid = IsInverted ? _invertedBid : _regularBid;
+            Percentage = IsInverted ? _invertedPercentage : _regularPercentage;
+            ExchangeRate = Ask;
+
+            var temp = AssetFrom;
+            AssetFrom = AssetTo;
+            AssetTo = temp;
+        }
+
+        private void Evaluate()
+        {
+            if (IsInverted)
+            {
+                _regularAsk = _invertedAsk != 0m ? Math.Round(1m/_invertedAsk, _regularAccuracy) : 0m;
+
+                _regularBid = _invertedBid != 0m ? Math.Round(1m/_invertedBid, _regularAccuracy) : 0m;
+
+                var temp = _regularAsk;
+
+                _regularAsk = _regularBid;
+
+                _regularBid = temp;
+
+                _regularPercentage = (1m/(_invertedPercentage/100m + 1m) - 1m) * 100m; //TODO make sure _invertedPercentage != 0
+
+                //_regularExchangeRate = _invertedExchangeRate != 0m ? Math.Round(1/ _invertedExchangeRate, _regularAccuracy) : 0m;
+            }
+            else
+            {
+                _invertedAsk = _regularAsk != 0m ? Math.Round(1m / _regularAsk, _invertedAccuracy) : 0m;
+
+                _invertedBid = _regularBid != 0m ? Math.Round(1m / _regularBid, _invertedAccuracy) : 0m;
+
+                var temp = _regularAsk;
+
+                _regularAsk = _regularBid;
+
+                _regularBid = temp;
+
+                _invertedPercentage = (1m / (_regularPercentage / 100m + 1m) - 1m) * 100m; //TODO make sure _regularPercentage != 0
+
+                //_invertedExchangeRate = _regularExchangeRate != 0m ? Math.Round(1 / _regularExchangeRate, _invertedAccuracy) : 0m;
+            }
+
+            Ask = IsInverted ? _invertedAsk : _regularAsk;
+
+            Bid = IsInverted ? _invertedBid : _regularBid;
+
+            Percentage = IsInverted ? _invertedPercentage : _regularPercentage;
+
+            ExchangeRate = Ask;
         }
 
 
@@ -190,7 +253,7 @@ namespace LykkeWallet.Pages
         {
             base.OnAppearing();
 
-            if(RefreshDataOnNextAppearing)
+            if (RefreshDataOnNextAppearing)
                 RefreshData();
         }
 
@@ -235,7 +298,7 @@ namespace LykkeWallet.Pages
 
         private async void OnAssetSelected(object sender, EventArgs e)
         {
-            var selectedButton = (Button) sender;
+            var selectedButton = (Button)sender;
             var selectedAsset = selectedButton.Text;
 
             foreach (var button in _assetsButtons)
@@ -274,17 +337,9 @@ namespace LykkeWallet.Pages
                         decimal bid;
                         bool bidParsed = decimal.TryParse(pair.Bid, NumberStyles.Any, null, out bid);
 
-                        var m = new ExhcangeRateModel
-                        {
-                            Id = pair.Id,
-                            AssetFrom = pair.Inverted ? pair.Id.Substring(3) : pair.Id.Substring(0, 3),
-                            AssetTo = pair.Inverted ? pair.Id.Substring(0, 3) : pair.Id.Substring(3),
-                            ExchangeRate = erParsed ? er : 0m,
-                            Percentage = pParsed ? p : 0m,
-                            Ask = askParsed ? ask : 0m,
-                            Bid = bidParsed ? bid : 0m,
-                            IsInverted = pair.Inverted
-                        };
+                        var assetPair = WalletApiSingleton.Instance.GetAssetPair(pair.Id).Result.AssetPair;
+
+                        var m = new ExhcangeRateModel(pair.Id, pair.Inverted, assetPair.Accuracy, assetPair.InvertedAccuracy, askParsed ? ask : 0m , bidParsed ? bid : 0m, pParsed ? p : 0m);
                         list.Add(m);
                     }
                     Device.BeginInvokeOnMainThread(() => ViewModel.ExchangeRates = list);
@@ -296,12 +351,14 @@ namespace LykkeWallet.Pages
 
         private void OnPairSelected(object sender, ItemTappedEventArgs e)
         {
-            var s = (ExhcangeRateModel)((ListView) sender).SelectedItem;
+
+            var s = (ExhcangeRateModel)((ListView)sender).SelectedItem;
+
+            ((ListView) sender).SelectedItem = null;
 
             var detailsPage = new ExchangeDetailsPage();
+            detailsPage.RefreshData(s.Id);
             detailsPage.SetAssetDescription(s.Id);
-            detailsPage.SetAssetPairDetials(s.Id);
-            detailsPage.SetPairDetail(s.Id, s.Ask, s.Bid, s.Percentage);
             Navigation.PushAsync(detailsPage);
         }
     }

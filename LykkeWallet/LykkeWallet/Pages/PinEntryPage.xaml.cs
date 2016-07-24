@@ -34,7 +34,7 @@ namespace LykkeWallet.Pages
         private async void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             submitButton.Clicked -= OnSubmitButtonClicked;
-
+            indicator.IsRunning = true;
             var resp = await WalletApiSingleton.Instance.CheckPinCodeAsync(pinEntry.Text);
             if (resp.Passed)
             {
@@ -48,7 +48,7 @@ namespace LykkeWallet.Pages
                 pinEntry.Text = "";
                 pinEntry.Focus();
             }
-
+            indicator.IsRunning = false;
             submitButton.Clicked += OnSubmitButtonClicked;
         }
 

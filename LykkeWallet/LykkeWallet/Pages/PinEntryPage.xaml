@@ -39,5 +39,8 @@
         IsEnabled="{Binding Text, Source={x:Reference pinEntry}, Mode=OneWay, Converter={StaticResource pinToButtonEnabledConverter}}"
         Clicked="OnSubmitButtonClicked"/>
     </Frame>
+    <Frame Padding="20,20,20,0">
+      <ActivityIndicator HorizontalOptions="CenterAndExpand" x:Name="indicator"></ActivityIndicator>
+    </Frame>
   </StackLayout>
 </ContentPage>

@@ -3,16 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:lykkeWallet="clr-namespace:LykkeWallet;assembly=LykkeWallet"
              xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
              x:Class="LykkeWallet.Pages.ExchangeDetailsPage">
   <ContentPage.Resources>
     <ResourceDictionary>
       <viewModels:ExchangeDetailsPageViewModel x:Key="exchangeDetailsPageViewModel" x:Name="exchangeDetailsPageViewModel"/>
+      <converters:DecimalPercentagetToStringConverter x:Key="decimalPercentagetToStringConverter" x:Name="decimalPercentagetToStringConverter" />
     </ResourceDictionary>
   </ContentPage.Resources>
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Create" Icon="ic_swap_horiz.png"></ToolbarItem>
+  </ContentPage.ToolbarItems>
   <StackLayout Padding="15, 20, 15, 0" BindingContext="{StaticResource exchangeDetailsPageViewModel}">
     <Label FontSize="Large"
            HorizontalOptions="Start"
-           Text="{Binding AssetPair}"/>
+           Text="{Binding PairId}"/>
     <StackLayout Orientation="Horizontal"
                  Padding="0, 15, 0, 30">
       <StackLayout HorizontalOptions="Start">
@@ -28,12 +33,12 @@
           <Frame Padding="5, 0, 5, 5">
             <Label FontSize="Large"
                    HorizontalOptions="Start"
-                   Text="{Binding ChangeAmount}"/>
+                   Text="{Binding Change}"/>
           </Frame>
           <Label FontSize="Small"
                  HorizontalOptions="Start"
                  VerticalOptions="Center"
-                 Text="{Binding ChangePercentage}"/>
+                 Text="{Binding Percentage, Converter={StaticResource decimalPercentagetToStringConverter}}"/>
         </StackLayout>
       </StackLayout>
     </StackLayout>
@@ -48,8 +53,8 @@
     <StackLayout Orientation="Horizontal"
                  HorizontalOptions="FillAndExpand"
                  Padding="0, 15, 0, 0">
-      <Button Text="{Binding BuyAtPrice, StringFormat='Buy at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
-      <Button Text="{Binding SellAtPrice, StringFormat='Sell at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
+      <Button Text="{Binding Ask, StringFormat='Buy at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
+      <Button Text="{Binding Bid, StringFormat='Sell at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
     </StackLayout>
     <ListView x:Name="assetDataList" ItemsSource="{Binding AssetDetails}">
       <ListView.ItemTemplate>

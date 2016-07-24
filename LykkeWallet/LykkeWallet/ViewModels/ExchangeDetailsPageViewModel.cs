@@ -13,8 +13,6 @@ namespace LykkeWallet.ViewModels
 {
     class ExchangeDetailsPageViewModel : INotifyPropertyChanged
     {
-        public string Id { set; get; }
-
         private ObservableCollection<AssetExchangeDetailModel> _assetDetails;
         public ObservableCollection<AssetExchangeDetailModel> AssetDetails
         {
@@ -29,15 +27,71 @@ namespace LykkeWallet.ViewModels
             }
         }
 
-        private string _assetPair;
-        public string AssetPair
+        private string _pairId;
+        public string PairId
         {
-            get { return _assetPair; }
+            get { return _pairId; }
             set
             {
-                if (value != _assetPair)
+                if (value != _pairId)
                 {
-                    _assetPair = value;
+                    _pairId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private decimal _ask;
+        public decimal Ask
+        {
+            get { return _ask; }
+            set
+            {
+                if (value != _ask)
+                {
+                    _ask = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private decimal _bid;
+        public decimal Bid
+        {
+            get { return _bid; }
+            set
+            {
+                if (value != _bid)
+                {
+                    _bid = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private decimal _change;
+        public decimal Change
+        {
+            get { return _change; }
+            set
+            {
+                if (value != _change)
+                {
+                    _change = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private decimal _percentage;
+        public decimal Percentage
+        {
+            get { return _percentage; }
+            set
+            {
+                if (value != _percentage)
+                {
+                    _percentage = value;
                     OnPropertyChanged();
                 }
             }
@@ -52,62 +106,6 @@ namespace LykkeWallet.ViewModels
                 if (value != _lastPrice)
                 {
                     _lastPrice = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private decimal _changeAmount;
-        public decimal ChangeAmount
-        {
-            get { return _changeAmount; }
-            set
-            {
-                if (value != _changeAmount)
-                {
-                    _changeAmount = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private decimal _changePercentage;
-        public decimal ChangePercentage
-        {
-            get { return _changePercentage; }
-            set
-            {
-                if (value != _changePercentage)
-                {
-                    _changePercentage = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private decimal _sellAtPrice;
-        public decimal SellAtPrice
-        {
-            get { return _sellAtPrice; }
-            set
-            {
-                if (value != _sellAtPrice)
-                {
-                    _sellAtPrice = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private decimal _buyAtPrice;
-        public decimal BuyAtPrice
-        {
-            get { return _buyAtPrice; }
-            set
-            {
-                if (value != _buyAtPrice)
-                {
-                    _buyAtPrice = value;
                     OnPropertyChanged();
                 }
             }

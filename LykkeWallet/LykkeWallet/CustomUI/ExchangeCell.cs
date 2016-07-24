@@ -22,6 +22,8 @@ namespace LykkeWallet.CustomUI
 
         public static readonly BindableProperty ExchangeRateProperty = BindableProperty.Create("ExchangeRate", typeof(decimal), typeof(ExchangeCell), decimal.Parse("0"));
 
+        public static readonly BindableProperty IsInvertedProperty = BindableProperty.Create("IsInvertedProperty", typeof(bool), typeof(ExchangeCell), false);
+
         public string Id { set; get; }
 
         public string AssetFrom
@@ -46,16 +48,29 @@ namespace LykkeWallet.CustomUI
             get { return (decimal)GetValue(ExchangeRateProperty); }
             set { SetValue(ExchangeRateProperty, value); }
         }
+
+        public bool IsInverted
+        {
+            get { return (bool)GetValue(IsInvertedProperty); }
+            set { SetValue(IsInvertedProperty, value); }
+        }
         public ExchangeCell()
         {
-            _assetFromLabel = new Label { HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
-            var slash = new Label { Text = "/", HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
-            _assetToLabel = new Label { HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
-            _percentageLabel = new Label { HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
+            _assetFromLabel = new Label { TextColor = Color.White, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
+            var slash = new Label { TextColor = Color.White, Text = "/", HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
+            _assetToLabel = new Label { TextColor = Color.White, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
+            _percentageLabel = new Label { TextColor = Color.White, HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
             _exchangeRateLabel = new Label { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)), BackgroundColor = Color.FromHex("FF9100"), TextColor = Color.White, WidthRequest = 100, HeightRequest = 30, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center};
             var invertButton = new Button { HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)), Text = "Invert" };
+
             invertButton.Clicked += Invert;
-            
+
+            var invertIcon = new Image {Source = "ic_swap_horiz.png", HeightRequest = 20};
+            var tp = new TapGestureRecognizer();
+            tp.Tapped += Invert;
+            //invertIcon.GestureRecognizers.Add(tp);
+            var invertFrame = new Frame {Padding = new Thickness(5, 0, 5, 0), Content = invertIcon};
+            invertFrame.GestureRecognizers.Add(tp);
 
             _assetFromLabel.SetBinding(Label.TextProperty, new Binding("AssetFrom"));
             _assetToLabel.SetBinding(Label.TextProperty, new Binding("AssetTo"));
@@ -75,23 +90,15 @@ namespace LykkeWallet.CustomUI
             
             horizontalStack.Children.Add(_percentageLabel);
             horizontalStack.Children.Add(_exchangeRateLabel);
-            horizontalStack.Children.Add(invertButton);
+            //horizontalStack.Children.Add(invertButton);
+            horizontalStack.Children.Add(invertFrame);
             
             View = horizontalStack;
         }
 
         private void Invert(object sender, EventArgs e)
         {
-            var newFrom = AssetTo;
-            var newTo = AssetFrom;
-            var newRate = ExchangeRate != 0m ? 1m/ExchangeRate : 0m;
-            var newPercentage = 1m / (Percentage/100m + 1m) - 1m;
-
-            AssetTo = newTo;
-            AssetFrom = newFrom;
-            ExchangeRate = newRate;
-            Percentage = newPercentage;
-
+            IsInverted = !IsInverted;
         }
         
 

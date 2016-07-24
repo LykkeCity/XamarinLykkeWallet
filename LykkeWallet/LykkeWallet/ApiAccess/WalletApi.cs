@@ -138,9 +138,9 @@ namespace LykkeWallet.ApiAccess
             return DoGetRequestAsync<AssetPairRatesRespModel>("AssetPairRates");
         }
 
-        public Task<AssetPairRatesRespModel> GetAssetPairRates(string id)
+        public Task<AssetPairRateRespModel> GetAssetPairRates(string id)
         {
-            return DoGetRequestAsync<AssetPairRatesRespModel>("AssetPairRates", new {Id = id});
+            return DoGetRequestAsync<AssetPairRateRespModel>("AssetPairRates", new {Id = id});
         }
 
         public Task<BaseAssetRespModel> GetBaseAsset()
@@ -170,6 +170,11 @@ namespace LykkeWallet.ApiAccess
         public Task PostInvertAssetPair(string id, bool inverted)
         {
             return DoPostRequestAsync("InvertedAssetPairs", new { AssetPairId = id, Inverted = inverted });
+        }
+
+        public Task<AssetPairRespModel> GetAssetPair(string id)
+        {
+            return DoGetRequestAsync<AssetPairRespModel>("AssetPair", new {id});
         }
     }
 }
