@@ -13,6 +13,48 @@ namespace LykkeWallet.ViewModels
 {
     class ExchangeDetailsPageViewModel : INotifyPropertyChanged
     {
+        private string _assetFrom;
+        public string AssetFrom
+        {
+            get { return _assetFrom; }
+            set
+            {
+                if (value != _assetFrom)
+                {
+                    _assetFrom = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _assetTo;
+        public string AssetTo
+        {
+            get { return _assetTo; }
+            set
+            {
+                if (value != _assetTo)
+                {
+                    _assetTo = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _currentPeriod;
+        public string CurrentPeriod
+        {
+            get { return _currentPeriod; }
+            set
+            {
+                if (value != _currentPeriod)
+                {
+                    _currentPeriod = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private ObservableCollection<AssetExchangeDetailModel> _assetDetails;
         public ObservableCollection<AssetExchangeDetailModel> AssetDetails
         {
@@ -106,6 +148,20 @@ namespace LykkeWallet.ViewModels
                 if (value != _lastPrice)
                 {
                     _lastPrice = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isInverted;
+        public bool IsInverted
+        {
+            get { return _isInverted; }
+            set
+            {
+                if (value != _isInverted)
+                {
+                    _isInverted = value;
                     OnPropertyChanged();
                 }
             }

@@ -38,7 +38,7 @@ namespace LykkeWallet.CustomUI
             var horizontalStack = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
-                Padding = new Thickness(10, 0, 10, 0)
+                Padding = new Thickness(10, 3, 10, 3)
             };
 
             horizontalStack.Children.Add(_labelLeft);

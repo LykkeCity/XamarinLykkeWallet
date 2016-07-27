@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using LykkeWallet.LocalKeyStorageAccess;
 using LykkeWallet.Models.Api;
 using LykkeWallet.Utils;
 
@@ -96,6 +97,7 @@ namespace LykkeWallet.ApiAccess
                 var webRequest = (HttpWebRequest) WebRequest.Create(Url + path);
                 webRequest.Method = "POST";
                 webRequest.ContentType = "application/json";
+                //webRequest. = $"DeviceType={Constants.UserAgent.DEVICE_TYPE};AppVersion={Constants.UserAgent.APP_VERSION};ClientFeatures={Constants.UserAgent.CLIENT_FEATURES}";
 
                 if (CurrentToken != null)
                     webRequest.Headers["Authorization"] = "Bearer " + CurrentToken;

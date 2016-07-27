@@ -2,13 +2,25 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:customUi="clr-namespace:LykkeWallet.CustomUI;assembly=LykkeWallet"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
              x:Class="LykkeWallet.Pages.WalletPage"
              Title="Wallet">
-
   <ContentPage.Resources>
     <ResourceDictionary>
+      <viewModels:WalletPageViewModel x:Name="walletPageViewModel" x:Key="walletPageViewModel" />
     </ResourceDictionary>
   </ContentPage.Resources>
-  
-  <TableView x:Name="tableView"></TableView>
+  <ListView BindingContext="{StaticResource walletPageViewModel}"
+            ItemsSource="{ Binding Wallets }"
+            IsGroupingEnabled="true"
+            GroupDisplayBinding="{Binding Name}"
+            GroupShortNameBinding ="{Binding Name}"
+            ItemSelected="OnWalletTapped"
+            x:Name="walletsListView">
+    <ListView.ItemTemplate>
+      <DataTemplate>
+        <customUi:WalletCell Balance="{Binding Balance}" Code="{Binding Code}" Symbol="{Binding Symbol}"></customUi:WalletCell>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
 </ContentPage>

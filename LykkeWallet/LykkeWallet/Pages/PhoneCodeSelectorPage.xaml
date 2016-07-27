@@ -6,7 +6,8 @@
              Title="Lykke Wallet">
   <ListView x:Name="listView"
             HasUnevenRows="True"
-            ItemSelected="OnCountrySelected">
+            ItemSelected="OnCountrySelected"
+            CachingStrategy="RecycleElement">
     <ListView.ItemTemplate>
       <DataTemplate>
         <customUi:PhoneCodeCell Country="{Binding Country}" Code="{Binding Code}" />

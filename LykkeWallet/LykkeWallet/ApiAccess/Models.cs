@@ -23,6 +23,7 @@ namespace LykkeWallet.ApiAccess
     public class AuthRespModel : KycRegistrationStatusModel
     {
         public string Token { get; set; }
+        public string EncodedPrivateKey { set; get; }
     }
 
 
@@ -74,7 +75,7 @@ namespace LykkeWallet.ApiAccess
         public string AssetPairId { get; set; }
         public bool HideIfZero { get; set; }
         public string IssuerId { get; set; }
-        public decimal Accuracy { get; set; }
+        public int Accuracy { get; set; }
     }
 
 
@@ -185,4 +186,114 @@ namespace LykkeWallet.ApiAccess
         public string QuotingAssetId { set; get; }
         public bool Inverted { set; get; }
     }
+
+    public class GraphPeriodsRespModel
+    {
+        public List<GraphPeriodsAvailablePeriodsItem> AvailablePeriods { set; get; }
+    }
+
+    public class GraphPeriodsAvailablePeriodsItem
+    {
+        public string Name { set; get; }
+        public string Value { set; get; }
+    }
+
+    public class TransactionsRespModel
+    {
+        public TransactionsCashInOutModel CashInOut { set; get; }
+        public List<TransactionTradeModel> Trades { set; get; }
+        public List<TrasactionTransferModel> Transfers { set; get; }
+        public List<TransactionCashOutAttemptsModel> CashOutAttempts { set; get; }
+        public List<TransactionCashOutCancelledModel> CashOutCancelled { set; get; }
+        public List<TransactionCashOutDoneModel> CashOutDone { set; get; }
+    }
+
+    public class TransactionsCashInOutModel
+    {
+        public string Id { set; get; }
+        public decimal Amount { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public string Asset { set; get; }
+        public string IconId { set; get; }
+        public string BlockChainHash { set; get; }
+        public bool IsRefund { set; get; }
+        public string AddressFrom { set; get; }
+        public string AddressTo { set; get; }
+    }
+
+    public class TransactionTradeModel
+    {
+        public string Id { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public string Asset { set; get; }
+        public decimal Volume { set; get; }
+        public string IconId { set; get; }
+        public string BlockChainHash { set; get; }
+        public string AddressFrom { set; get; }
+        public string AddressTo { set; get; }
+        public TransactionMarketOrderModel MarketOrder { set; get; }
+
+    }
+
+    public class TransactionMarketOrderModel
+    {
+        public string Id { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public string OrderType { set; get; }
+        public decimal Volume { set; get; }
+        public decimal Price { set; get; }
+        public string BaseAsset { set; get; }
+        public string AssetPair { set; get; }
+        public decimal TotalCost { set; get; }
+        public decimal Comission { set; get; }
+        public decimal Position { set; get; }
+        public int Accuracy { set; get; }
+    }
+
+    public class TrasactionTransferModel
+    {
+        public string Id { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public string Asset { set; get; }
+        public decimal Volume { set; get; }
+        public string IconId { set; get; }
+        public string BlockChainHash { set; get; }
+        public string AddressFrom { set; get; }
+        public string AddressTo { set; get; }
+    }
+
+    public class TransactionCashOutAttemptsModel
+    {
+        public string Id { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public string Asset { set; get; }
+        public decimal Volume { set; get; }
+        public string IconId { set; get; }
+    }
+
+    public class TransactionCashOutCancelledModel
+    {
+        public string Id { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public string Asset { set; get; }
+        public decimal Volume { set; get; }
+        public string IconId { set; get; }
+    }
+
+    public class TransactionCashOutDoneModel
+    {
+        public string Id { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public string Asset { set; get; }
+        public decimal Volume { set; get; }
+        public string IconId { set; get; }
+    }
+
 }

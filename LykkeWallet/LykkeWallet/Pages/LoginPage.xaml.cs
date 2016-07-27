@@ -76,6 +76,8 @@ namespace LykkeWallet.Pages
 
                 long myRequestNumber = ++_requestNumber;
 
+                activityIndicator.IsRunning = true;
+
                 await Task.Delay(200);
 
                 if (_requestNumber != myRequestNumber)
@@ -83,16 +85,21 @@ namespace LykkeWallet.Pages
 
                 ViewModel.MailStatus = MailStatus.InvalidEmail;
 
+                activityIndicator.IsRunning = true;
+
                 var result = (await WalletApiSingleton.Instance.AccountExistAsync(text)).IsEmailRegistered;
 
                 if (_requestNumber != myRequestNumber)
                     return;
 
                 ViewModel.MailStatus = result ? MailStatus.ExistingEmail : MailStatus.NewEmail;
+
+                activityIndicator.IsRunning = false;
             }
             else
             {
                 ViewModel.MailStatus = MailStatus.InvalidEmail;
+                activityIndicator.IsRunning = false;
             }
         }
 

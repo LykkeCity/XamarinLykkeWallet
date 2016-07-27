@@ -30,13 +30,16 @@ namespace LykkeWallet.Pages
                 var exchangePage = new ExchangePage();
                 exchangePage.RefreshButtons();
                 exchangePage.RefreshData();
-                exchangePage.RefreshDataOnNextAppearing = false;
+
+                var historyPage = new HistoryPage();
+                historyPage.RefreshData();
 
                 var settingsPage = new SettingsPage();
                 settingsPage.RefreshData();
 
                 Children.Add(walletPage);
                 Children.Add(exchangePage);
+                Children.Add(historyPage);
                 Children.Add(settingsPage);
             }
             catch (Exception ex)
@@ -47,7 +50,8 @@ namespace LykkeWallet.Pages
 
         protected override bool OnBackButtonPressed()
         {
-            return base.OnBackButtonPressed();
+            return true;
+            //return base.OnBackButtonPressed();
         }
     }
 }

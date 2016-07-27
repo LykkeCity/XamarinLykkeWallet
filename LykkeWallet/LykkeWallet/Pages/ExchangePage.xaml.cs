@@ -13,6 +13,7 @@ using LykkeWallet.Annotations;
 using LykkeWallet.ApiAccess;
 using LykkeWallet.ViewModels;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace LykkeWallet.Pages
 {
@@ -236,12 +237,11 @@ namespace LykkeWallet.Pages
         }
     }
 
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ExchangePage : ContentPage
     {
         private string _asset;
-        public bool RefreshDataOnNextAppearing { set; get; }
         private List<Button> _assetsButtons;
-
 
         public ExchangePageViewModel ViewModel => exchangePageViewModel;
         public ExchangePage()
@@ -249,51 +249,41 @@ namespace LykkeWallet.Pages
             InitializeComponent();
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-
-            if (RefreshDataOnNextAppearing)
-                RefreshData();
-        }
-
         protected override void OnDisappearing()
         {
+            exchageRatesListView.SelectedItem = null;
             base.OnDisappearing();
-            RefreshDataOnNextAppearing = true;
         }
 
         public void RefreshButtons()
         {
-            Task.Run(
-                () =>
+            Task.Run(() =>
+            {
+                _assetsButtons = new List<Button>();
+
+                var result = WalletApiSingleton.Instance.GetAllBaseAssets().Result;
+                foreach (var asset in result.Assets)
                 {
-                    _assetsButtons = new List<Button>();
-
-                    var result = WalletApiSingleton.Instance.GetAllBaseAssets().Result;
-                    foreach (var asset in result.Assets)
+                    var button = new Button
                     {
-                        var button = new Button
-                        {
-                            FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
-                            HeightRequest = 50,
-                            WidthRequest = 80,
-                            Text = asset.Id,
-                        };
+                        FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
+                        HeightRequest = 50,
+                        WidthRequest = 80,
+                        Text = asset.Id,
+                    };
 
-                        _assetsButtons.Add(button);
+                    _assetsButtons.Add(button);
 
-                        var frame = new Frame
-                        {
-                            Content = button,
-                            Padding = new Thickness(0, 0, 0, 10)
-                        };
+                    var frame = new Frame
+                    {
+                        Content = button,
+                        Padding = new Thickness(0, 0, 0, 10)
+                    };
 
-                        button.Clicked += OnAssetSelected;
-                        Device.BeginInvokeOnMainThread(() => buttonsStack.Children.Add(frame));
-                    }
-
-                });
+                    button.Clicked += OnAssetSelected;
+                    Device.BeginInvokeOnMainThread(() => buttonsStack.Children.Add(frame));
+                }
+            });
         }
 
         private async void OnAssetSelected(object sender, EventArgs e)
@@ -321,8 +311,9 @@ namespace LykkeWallet.Pages
         public void RefreshData(string selectedAsset = null)
         {
             Debug.WriteLine("Fetching exchange data.......");
-            Task.Run(
-                () =>
+            Task.Run(() =>
+            {
+                try
                 {
                     var list = new ObservableCollection<ExhcangeRateModel>();
                     var assetsPairs = WalletApiSingleton.Instance.GetAssetPairRates().Result;
@@ -339,14 +330,25 @@ namespace LykkeWallet.Pages
 
                         var assetPair = WalletApiSingleton.Instance.GetAssetPair(pair.Id).Result.AssetPair;
 
-                        var m = new ExhcangeRateModel(pair.Id, pair.Inverted, assetPair.Accuracy, assetPair.InvertedAccuracy, askParsed ? ask : 0m , bidParsed ? bid : 0m, pParsed ? p : 0m);
+                        var m = new ExhcangeRateModel(pair.Id, pair.Inverted, assetPair.Accuracy,
+                            assetPair.InvertedAccuracy, askParsed ? ask : 0m, bidParsed ? bid : 0m, pParsed ? p : 0m);
                         list.Add(m);
                     }
-                    Device.BeginInvokeOnMainThread(() => ViewModel.ExchangeRates = list);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        ViewModel.ExchangeRates = list;
+                        if(exchageRatesListView.IsRefreshing)
+                            exchageRatesListView.EndRefresh();
+                    });
                     if (selectedAsset != null)
                         _asset = selectedAsset;
-
-                });
+                }
+                catch (Exception ex)
+                {
+                    var a = 234;
+                }
+            });
+                    
         }
 
         private void OnPairSelected(object sender, ItemTappedEventArgs e)
@@ -357,9 +359,15 @@ namespace LykkeWallet.Pages
             ((ListView) sender).SelectedItem = null;
 
             var detailsPage = new ExchangeDetailsPage();
+            detailsPage.RefreshButtons();
             detailsPage.RefreshData(s.Id);
             detailsPage.SetAssetDescription(s.Id);
             Navigation.PushAsync(detailsPage);
+        }
+
+        private void OnListRefreshed(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }

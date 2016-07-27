@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 using LykkeWallet.Annotations;
 using LykkeWallet.ApiAccess;
 using LykkeWallet.ViewModels;
+
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace LykkeWallet.Pages
 {
-
     public class AssetExchangeDetailModel
     {
         public string PrimaryText { set; get; }
@@ -22,23 +23,16 @@ namespace LykkeWallet.Pages
         public ImageSource Image { set; get; }
     }
 
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ExchangeDetailsPage : ContentPage
     {
-        private readonly List<Button> _periodButtons;
+        private List<Button> _periodButtons;
 
         private ExchangeDetailsPageViewModel ViewModel => exchangeDetailsPageViewModel;
 
         public ExchangeDetailsPage()
         {
             InitializeComponent();
-
-            _periodButtons = new List<Button>();
-            foreach (var item in periodsStack.Children)
-            {
-                var b = (Button)item;
-                b.Clicked += NewPeriodSelected;
-                _periodButtons.Add(b);
-            }
 
         }
 
@@ -53,6 +47,19 @@ namespace LykkeWallet.Pages
 
             b.Opacity = 1;
             b.BackgroundColor = Color.Default;
+        }
+
+        public async void RefreshButtons()
+        {
+            var periods = await WalletApiSingleton.Instance.GetGraphPeriods();
+            _periodButtons = new List<Button>();
+            foreach (var item in periods.AvailablePeriods)
+            {
+                var b = new Button { Text = item.Name, HorizontalOptions = LayoutOptions.Fill, };
+                b.Clicked += NewPeriodSelected;
+                _periodButtons.Add(b);
+                periodsStack.Children.Add(b);
+            }
         }
 
         public async void SetAssetDescription(string id)
@@ -121,29 +128,49 @@ namespace LykkeWallet.Pages
                         var assetPair3 = WalletApiSingleton.Instance.GetAssetPairDetailedRates(id, period, points).Result;
 
                         decimal ask;
-                        bool askParsed = decimal.TryParse(assetPair.Ask, NumberStyles.Any, null, out ask);
+                        bool askParsed = decimal.TryParse(assetPair.Inverted ? assetPair.Bid : assetPair.Ask, NumberStyles.Any, null, out ask);
                         decimal bid;
-                        bool bidParsed = decimal.TryParse(assetPair.Bid, NumberStyles.Any, null, out bid);
+                        bool bidParsed = decimal.TryParse(assetPair.Inverted ? assetPair.Ask : assetPair.Bid, NumberStyles.Any, null, out bid);
 
                         ViewModel.PairId = id;
+                        ViewModel.AssetFrom = assetPair.Inverted ? id.Substring(3) : id.Substring(0, 3);
+                        ViewModel.AssetTo = assetPair.Inverted ? id.Substring(0, 3) : id.Substring(3);
                         ViewModel.Ask = askParsed
                             ? Math.Round(ask, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy)
                             : 0m;
                         ViewModel.Bid = bidParsed
                             ? Math.Round(bid, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy)
                             : 0m;
+                        var b = ((assetPair.Inverted ? 1.0 / assetPair3.Rate.ChngGrph.Last() : assetPair3.Rate.ChngGrph.Last()) - (assetPair.Inverted ? 1.0 / assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2] : assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2])).ToString();
                         ViewModel.Change =
-                            decimal.Parse(
-                                (assetPair3.Rate.ChngGrph.Last() - assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2]).ToString
-                                    ());
-                        ViewModel.Percentage = assetPair3.Rate.PChange;
-                        ViewModel.LastPrice = assetPair3.LastPrice;
+                            Math.Round(Convert.ToDecimal(
+                                ((assetPair.Inverted ? 1.0/assetPair3.Rate.ChngGrph.Last() : assetPair3.Rate.ChngGrph.Last()) - (assetPair.Inverted ? 1.0/ assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2] : assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2]))),
+                                    assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy);
+                        ViewModel.Percentage = assetPair3.Rate.PChange == 0m ? 0m : (assetPair.Inverted ? (1m / (assetPair3.Rate.PChange / 100m + 1m) - 1m) * 100m : assetPair3.Rate.PChange);
+                        ViewModel.LastPrice = Math.Round(assetPair.Inverted ? 1m / assetPair3.LastPrice : assetPair3.LastPrice, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy);
+                        ViewModel.IsInverted = assetPair.Inverted;
                     }
                     catch (Exception ex)
                     {
                         var a = 234;
                     }
                 });
+        }
+
+        private async void InvertPair(object sender, EventArgs e)
+        {
+            invertToolbarItem.Clicked -= InvertPair;
+            try
+            {
+                await WalletApiSingleton.Instance.PostInvertAssetPair(ViewModel.PairId, !ViewModel.IsInverted);
+                RefreshData(ViewModel.PairId);
+            }
+            catch (Exception ex)
+            {
+                var a = 234;
+            }
+
+            invertToolbarItem.Clicked += InvertPair;
         }
     }
 }

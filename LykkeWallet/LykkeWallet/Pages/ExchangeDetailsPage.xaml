@@ -12,12 +12,20 @@
     </ResourceDictionary>
   </ContentPage.Resources>
   <ContentPage.ToolbarItems>
-    <ToolbarItem Text="Create" Icon="ic_swap_horiz.png"></ToolbarItem>
+    <ToolbarItem x:Name="invertToolbarItem" Text="Create" Icon="ic_swap_horiz.png" Clicked="InvertPair"></ToolbarItem>
   </ContentPage.ToolbarItems>
   <StackLayout Padding="15, 20, 15, 0" BindingContext="{StaticResource exchangeDetailsPageViewModel}">
-    <Label FontSize="Large"
-           HorizontalOptions="Start"
-           Text="{Binding PairId}"/>
+    <StackLayout Orientation="Horizontal">
+      <Label FontSize="Large"
+             HorizontalOptions="Start"
+             Text="{Binding AssetFrom}"/>
+      <Label FontSize="Large"
+             HorizontalOptions="Start"
+             Text="/"/>
+      <Label FontSize="Large"
+             HorizontalOptions="Start"
+             Text="{Binding AssetTo}"/>
+    </StackLayout>
     <StackLayout Orientation="Horizontal"
                  Padding="0, 15, 0, 30">
       <StackLayout HorizontalOptions="Start">
@@ -38,17 +46,13 @@
           <Label FontSize="Small"
                  HorizontalOptions="Start"
                  VerticalOptions="Center"
-                 Text="{Binding Percentage, Converter={StaticResource decimalPercentagetToStringConverter}}"/>
+                 Text="{Binding Percentage, StringFormat='({0})', Converter={StaticResource decimalPercentagetToStringConverter}}"/>
         </StackLayout>
       </StackLayout>
     </StackLayout>
     <StackLayout x:Name="periodsStack"
                  Orientation="Horizontal"
                  HorizontalOptions="FillAndExpand">
-      <Button Text="1 D" WidthRequest="40" HorizontalOptions = "FillAndExpand"></Button>
-      <Button Text="1 M" WidthRequest="40" HorizontalOptions = "FillAndExpand"></Button>
-      <Button Text="6 M" WidthRequest="40" HorizontalOptions = "FillAndExpand"></Button>
-      <Button Text="1 Y" WidthRequest="40" HorizontalOptions = "FillAndExpand"></Button>
     </StackLayout>
     <StackLayout Orientation="Horizontal"
                  HorizontalOptions="FillAndExpand"

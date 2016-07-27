@@ -26,6 +26,8 @@ namespace LykkeWallet.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::PCLCrypto.Resource.String.ApplicationName = global::LykkeWallet.Droid.Resource.String.ApplicationName;
+			global::PCLCrypto.Resource.String.Hello = global::LykkeWallet.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_in = global::LykkeWallet.Droid.Resource.Animation.abc_fade_in;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_fade_out = global::LykkeWallet.Droid.Resource.Animation.abc_fade_out;
 			global::Xamarin.Forms.Platform.Resource.Animation.abc_grow_fade_in_from_bottom = global::LykkeWallet.Droid.Resource.Animation.abc_grow_fade_in_from_bottom;

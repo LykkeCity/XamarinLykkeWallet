@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using LykkeWallet.LocalKeyStorageAccess;
 using Xamarin.Forms;
 
 namespace LykkeWallet.Pages
@@ -26,6 +26,8 @@ namespace LykkeWallet.Pages
         private void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             submitButton.Clicked -= OnSubmitButtonClicked;
+            var localStorage = new LocalKeyStorage();
+            localStorage.Save(Constants.PASSWORD, passwordEntry.Text);
             Navigation.PushAsync(new PasswordHintEntryPage(_email, passwordEntry.Text));
             submitButton.Clicked += OnSubmitButtonClicked;
         }

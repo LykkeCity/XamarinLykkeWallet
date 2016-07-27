@@ -9,9 +9,13 @@ using static System.Decimal;
 
 namespace LykkeWallet.CustomUI
 {
-    class WalletCell : ViewCell
+    public class WalletCell : ViewCell
     {
         private Label _labelLeft, _labelRight, _labelRightRight;
+
+        public static readonly BindableProperty CodeProperty = BindableProperty.Create("Code", typeof(string), typeof(WalletCell), "Code");
+        public static readonly BindableProperty SymbolProperty = BindableProperty.Create("Symbol", typeof(string), typeof(WalletCell), "Symbol");
+        public static readonly BindableProperty BalanceProperty = BindableProperty.Create("Balance", typeof(decimal), typeof(WalletCell), 0m);
 
         public string Code
         {
@@ -23,7 +27,7 @@ namespace LykkeWallet.CustomUI
             set { _labelRight.Text = value; }
             get { return _labelRight.Text; }
         }
-        public Decimal Balance
+        public decimal Balance
         {
             set { _labelRightRight.Text = value.ToString(); }
             get { return decimal.Parse(_labelRightRight.Text);  }
@@ -34,6 +38,11 @@ namespace LykkeWallet.CustomUI
             _labelLeft = new Label { HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) };
             _labelRight = new Label { HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) };
             _labelRightRight = new Label { HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) };
+
+
+            _labelLeft.SetBinding(Label.TextProperty, new Binding("Code"));
+            _labelRight.SetBinding(Label.TextProperty, new Binding("Symbol"));
+            _labelRightRight.SetBinding(Label.TextProperty, new Binding("Balance"));
 
             var horizontalStack = new StackLayout
             {

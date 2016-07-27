@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LykkeWallet.Models.Api;
 using LykkeWallet.ApiAccess;
 using LykkeWallet.LocalKeyStorageAccess;
+using NBitcoin;
 
 namespace LykkeWallet.ApiAccess
 {
@@ -59,13 +60,17 @@ namespace LykkeWallet.ApiAccess
             return DoGetRequestAsync<KycRegistrationStatusModel>("Registration");
         }
 
-        public async Task<KycRegistrationStatusModel> AuthAsync(string email, string password)
+        public async Task<AuthRespModel> AuthAsync(string email, string password)
         {
             var result = await DoPostRequestAsync<AuthRespModel>("Auth", new { Email = email, Password = password });
             SaveToken(result.Token);
             return result;
         }
 
+        public Task PostClientKeys(string pubKey, string encodedPrivateKey)
+        {
+            return DoPostRequestAsync("ClientKeys", new {pubKey, encodedPrivateKey});
+        }
 
         public Task<PersonalDataRespModel> GetPersonalDataAsync()
         {
@@ -175,6 +180,16 @@ namespace LykkeWallet.ApiAccess
         public Task<AssetPairRespModel> GetAssetPair(string id)
         {
             return DoGetRequestAsync<AssetPairRespModel>("AssetPair", new {id});
+        }
+
+        public Task<GraphPeriodsRespModel> GetGraphPeriods()
+        {
+            return DoGetRequestAsync<GraphPeriodsRespModel>("GraphPeriods");
+        }
+
+        public Task PostInvertAssetPair(string id, string inverted)
+        {
+            return DoPostRequestAsync("InvertedAssetPairs", new {AssetPairId = id, Inverted = inverted});
         }
     }
 }

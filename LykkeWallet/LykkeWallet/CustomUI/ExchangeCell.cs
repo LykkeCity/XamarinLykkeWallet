@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using LykkeWallet.ApiAccess;
 using LykkeWallet.Converters;
 using Xamarin.Forms;
 
@@ -13,6 +14,10 @@ namespace LykkeWallet.CustomUI
     class ExchangeCell : ViewCell
     {
         private readonly Label _assetFromLabel, _assetToLabel, _percentageLabel, _exchangeRateLabel;
+
+        private readonly Frame _invertFrame;
+
+        public static readonly BindableProperty IdProperty = BindableProperty.Create("Id", typeof(string), typeof(ExchangeCell), "Id");
 
         public static readonly BindableProperty AssetFromProperty = BindableProperty.Create("AssetFrom", typeof(string), typeof(ExchangeCell), "AssetFrom");
 
@@ -24,7 +29,11 @@ namespace LykkeWallet.CustomUI
 
         public static readonly BindableProperty IsInvertedProperty = BindableProperty.Create("IsInvertedProperty", typeof(bool), typeof(ExchangeCell), false);
 
-        public string Id { set; get; }
+        public string Id
+        {
+            get { return (string) GetValue(IdProperty); }
+            set { SetValue(IdProperty, value);}
+        }
 
         public string AssetFrom
         {
@@ -61,16 +70,13 @@ namespace LykkeWallet.CustomUI
             _assetToLabel = new Label { TextColor = Color.White, HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
             _percentageLabel = new Label { TextColor = Color.White, HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)) };
             _exchangeRateLabel = new Label { HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)), BackgroundColor = Color.FromHex("FF9100"), TextColor = Color.White, WidthRequest = 100, HeightRequest = 30, HorizontalTextAlignment = TextAlignment.Center, VerticalTextAlignment = TextAlignment.Center};
-            var invertButton = new Button { HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)), Text = "Invert" };
-
-            invertButton.Clicked += Invert;
 
             var invertIcon = new Image {Source = "ic_swap_horiz.png", HeightRequest = 20};
             var tp = new TapGestureRecognizer();
             tp.Tapped += Invert;
             //invertIcon.GestureRecognizers.Add(tp);
-            var invertFrame = new Frame {Padding = new Thickness(5, 0, 5, 0), Content = invertIcon};
-            invertFrame.GestureRecognizers.Add(tp);
+            _invertFrame = new Frame {Padding = new Thickness(5, 0, 5, 0), Content = invertIcon};
+            _invertFrame.GestureRecognizers.Add(tp);
 
             _assetFromLabel.SetBinding(Label.TextProperty, new Binding("AssetFrom"));
             _assetToLabel.SetBinding(Label.TextProperty, new Binding("AssetTo"));
@@ -91,14 +97,27 @@ namespace LykkeWallet.CustomUI
             horizontalStack.Children.Add(_percentageLabel);
             horizontalStack.Children.Add(_exchangeRateLabel);
             //horizontalStack.Children.Add(invertButton);
-            horizontalStack.Children.Add(invertFrame);
+            horizontalStack.Children.Add(_invertFrame);
             
             View = horizontalStack;
         }
 
-        private void Invert(object sender, EventArgs e)
+        private async void Invert(object sender, EventArgs e)
         {
-            IsInverted = !IsInverted;
+            try
+            {
+
+                var tapRecognizer = _invertFrame.GestureRecognizers[0];
+                //_invertFrame.GestureRecognizers.RemoveAt(0);
+                await WalletApiSingleton.Instance.PostInvertAssetPair(Id, !IsInverted);
+                IsInverted = !IsInverted;
+
+                //_invertFrame.GestureRecognizers.Add(tapRecognizer);
+            }
+            catch (Exception ex)
+            {
+                var a = 234;
+            }
         }
         
 

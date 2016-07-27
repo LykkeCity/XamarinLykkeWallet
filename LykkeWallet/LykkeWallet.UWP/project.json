@@ -1,5 +1,7 @@
 ﻿{
   "dependencies": {
+    "NBitcoin": "3.0.0.38",
+    "PCLCrypto": "2.0.147",
     "Xam.Plugin.Media": "2.3.0",
     "Xamarin.Forms": "2.0.0.6482"
   },
