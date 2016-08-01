@@ -116,12 +116,8 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="NBitcoin, Version=3.0.0.38, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NBitcoin.3.0.0.38\lib\portable-net45+win+wpa81+Xamarin.iOS10+MonoAndroid10+MonoTouch10\NBitcoin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\NBitcoin.3.0.0.38\lib\portable-net45+win+wpa81+Xamarin.iOS10+MonoAndroid10+MonoTouch10\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="NBitcoin, Version=3.0.0.41, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NBitcoin.3.0.0.41\lib\portable-net45+win+wpa81+Xamarin.iOS10+MonoAndroid10+MonoTouch10\NBitcoin.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="PCLCrypto, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d4421c8a4786956c, processorArchitecture=MSIL">

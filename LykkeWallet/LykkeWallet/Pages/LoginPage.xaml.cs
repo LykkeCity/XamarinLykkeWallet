@@ -31,19 +31,23 @@ namespace LykkeWallet.Pages
 
         protected override async void OnAppearing()
         {
-            var localStorage = new LocalKeyStorage();
-            if (!string.IsNullOrEmpty(localStorage.Get(WalletApi.TokenName)))
+            try
             {
-                await Navigation.PushAsync(new MainTabbedPage(true));
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(mailEntry.Text))
+                if (!string.IsNullOrEmpty(LocalKeyAccessSingleton.Instance.GetToken()))
                 {
-                    OnTextChanged(null, null);
+                    await Navigation.PushAsync(new MainTabbedPage(true));
                 }
+                else
+                {
+                    if (!string.IsNullOrEmpty(mailEntry.Text))
+                    {
+                        OnTextChanged(null, null);
+                    }
+                }
+            } catch(Exception ex)
+            {
+                var a = 234;
             }
-
             base.OnAppearing();
 
 

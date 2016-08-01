@@ -9,6 +9,9 @@ namespace LykkeWallet.LocalKeyStorageAccess
     class Constants
     {
         public const string PASSWORD = "PASSWORD_TEMP_STORAGE";
+        public const string ENCODED_PK = "ENCODED_PK";
+        public const string PK_MAIL_SUFFIX = "_PK_MAIL_SUFFIX";
+        public const string SECURITY_TOKEN = "SECURITY_TOKEN";
 
         public class UserAgent
         {

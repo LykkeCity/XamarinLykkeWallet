@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using LykkeWallet.LocalKeyStorageAccess;
 using LykkeWallet.Models.Api;
 using LykkeWallet.Utils;
@@ -43,9 +44,10 @@ namespace LykkeWallet.ApiAccess
             {
                 var q = data == null ? "" : "?" + data.FormatUrlString();
 
-                var webRequest = WebRequest.Create(Url + path + q);
+                var webRequest = (HttpWebRequest)WebRequest.Create(Url + path + q);
                 webRequest.Method = "GET";
                 webRequest.ContentType = "application/json";
+                SetUserAgent(webRequest, $"DeviceType={Constants.UserAgent.DEVICE_TYPE};AppVersion={Constants.UserAgent.APP_VERSION};ClientFeatures={Constants.UserAgent.CLIENT_FEATURES}");
 
                 if (CurrentToken != null)
                     webRequest.Headers["Authorization"] = "Bearer " + CurrentToken;
@@ -88,6 +90,45 @@ namespace LykkeWallet.ApiAccess
                 throw;
             }
         }
+        private static void SetUserAgent(HttpWebRequest request, string userAgent)
+
+        {
+
+            //Type type = request.GetType();
+            TypeInfo typeInfo = request.GetType().GetTypeInfo();
+            System.Reflection.PropertyInfo prop = typeInfo.DeclaredProperties.FirstOrDefault(x => x.Name.ToLower() == "useragent");
+
+            if (prop != null)
+
+            {
+                prop.SetValue(request, userAgent, null);
+            }
+
+        }
+
+        private static string GetUserAgent(HttpWebRequest request)
+
+        {
+
+            string ret = "not available";
+
+            TypeInfo typeInfo = request.GetType().GetTypeInfo();
+            System.Reflection.PropertyInfo prop = typeInfo.DeclaredProperties.FirstOrDefault(x => x.Name.ToLower() == "useragent");
+
+            if (prop != null)
+
+            {
+
+                ret = (string)prop.GetValue(request, null);
+
+            }
+
+
+
+            return ret;
+
+        }
+
 
 
         private static async Task<string> DoPostHttpRequestAsync(string path, object data)
@@ -98,7 +139,8 @@ namespace LykkeWallet.ApiAccess
                 webRequest.Method = "POST";
                 webRequest.ContentType = "application/json";
                 //webRequest. = $"DeviceType={Constants.UserAgent.DEVICE_TYPE};AppVersion={Constants.UserAgent.APP_VERSION};ClientFeatures={Constants.UserAgent.CLIENT_FEATURES}";
-
+                SetUserAgent(webRequest, $"DeviceType={Constants.UserAgent.DEVICE_TYPE};AppVersion={Constants.UserAgent.APP_VERSION};ClientFeatures={Constants.UserAgent.CLIENT_FEATURES}");
+                
                 if (CurrentToken != null)
                     webRequest.Headers["Authorization"] = "Bearer " + CurrentToken;
 

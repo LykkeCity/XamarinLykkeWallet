@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LykkeWallet.ApiAccess;
 using LykkeWallet.ViewModels;
 using Xamarin.Forms;
+using LykkeWallet.LocalKeyStorageAccess;
 
 namespace LykkeWallet.Pages
 {
@@ -39,6 +40,9 @@ namespace LykkeWallet.Pages
             try
             {
                 var result = await WalletApiSingleton.Instance.AuthAsync(ViewModel.Email, ViewModel.Password);
+                LocalKeyAccessSingleton.Instance.SavePrivateKey(result.EncodedPrivateKey);
+                LocalKeyAccessSingleton.Instance.AddOrUpdateEmailKeyPair(ViewModel.Email, result.EncodedPrivateKey);
+                
                 if (!string.IsNullOrEmpty(result.EncodedPrivateKey))
                 {
 

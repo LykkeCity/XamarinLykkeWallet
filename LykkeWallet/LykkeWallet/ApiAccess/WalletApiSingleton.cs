@@ -9,7 +9,7 @@ namespace LykkeWallet.ApiAccess
 {
     public static class WalletApiSingleton
     {
-        private static readonly WalletApi _instance = new WalletApi(new LocalKeyStorage());
+        private static readonly WalletApi _instance = new WalletApi(LocalKeyAccessSingleton.Instance);
         
         static WalletApiSingleton()
         {

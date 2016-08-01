@@ -12,13 +12,12 @@ namespace LykkeWallet.ApiAccess
 {
     public partial class WalletApi : IWalletApi
     {
-        private readonly ILocalKeyStorage _localKeyStorage;
-        public const string TokenName = "Token";
+        private readonly ILocalKeyAccess _localKeyAccess;
 
-        public WalletApi(ILocalKeyStorage localKeyStorage)
+        public WalletApi(ILocalKeyAccess localKeyAccess)
         {
-            _localKeyStorage = localKeyStorage;
-            CurrentToken = _localKeyStorage.Get(TokenName);
+            _localKeyAccess = localKeyAccess;
+            CurrentToken = _localKeyAccess.GetToken();
         }
         /*
         public WalletApi()
@@ -30,7 +29,7 @@ namespace LykkeWallet.ApiAccess
         private void SaveToken(string token)
         {
             CurrentToken = token;
-            _localKeyStorage.Save(TokenName, token);
+            _localKeyAccess.SaveToken(token);
         }
 
 

@@ -11,19 +11,35 @@ namespace LykkeWallet.Pages
 {
     public partial class Page1 : ContentPage
     {
+        private Image imgCode;
+        private Button btnCreate;
+        private EntryCell txtBarcode;
         public Page1()
         {
             InitializeComponent();
-        }
+            btnCreate = new Button { Text = "Create" };
+            imgCode = new Image();
+            txtBarcode = new EntryCell { Label = "Bar Code" };
 
+            btnCreate.Clicked += OnSubmitButtonClicked;
+
+            this.Content = new StackLayout
+            {
+                Children = {
+                    btnCreate,
+                    imgCode,
+                    new TableView(new TableRoot {
+                        new TableSection {
+                            txtBarcode
+                        }
+                    })
+                }
+            };
+        }
         private void OnSubmitButtonClicked(object sender, EventArgs e)
         {
-            /*var scanner = new ZXing.Mobile.MobileBarcodeScanner();
-            var result = await scanner.Scan();
 
-            if (result != null)
-                await DisplayAlert("", result.Text, "OK"); //Debug.WriteLine("Scanned Barcode: " + );
-                */
         }
+
     }
 }

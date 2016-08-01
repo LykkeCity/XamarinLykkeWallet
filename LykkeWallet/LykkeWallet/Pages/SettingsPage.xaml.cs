@@ -89,8 +89,8 @@ namespace LykkeWallet.Pages
         private void LogOut(object sender, EventArgs e)
         {
             _logOutCell.Tapped -= LogOut;
-            var storage = new LocalKeyStorage();
-            storage.Save(WalletApi.TokenName, null);
+            LocalKeyAccessSingleton.Instance.SaveToken(null);
+            LocalKeyAccessSingleton.Instance.SavePrivateKey(null);
             Navigation.PopToRootAsync();
             _logOutCell.Tapped += LogOut;
         }
