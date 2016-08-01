@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LykkeWallet.Pages.WithdrawBtcAddressPage"
+             Title="Withdraw funds">
+  <StackLayout Padding="10,0,10,0">
+    <Frame Padding="0,20,0,30">
+      <Label Text="Your wallet will not be charged until you authorize this transaction" FontSize="Small" />
+    </Frame>
+    <Label Text="Bitcoin wallet" FontSize="Small" />
+    <StackLayout Orientation="Horizontal">
+      <Entry x:Name="addressEntry" HorizontalOptions="FillAndExpand" />
+      <Button Text="QR" HorizontalOptions="End" Clicked="OnQRButtonClicked" />
+    </StackLayout>
+    <Frame Padding="0,20,0,0">
+      <Button Text="Proceed" FontSize="Medium" Clicked="OnProceedButtonClicked" IsEnabled="True" HorizontalOptions="EndAndExpand" VerticalOptions="Start"/>
+    </Frame>
+  </StackLayout>
+</ContentPage>

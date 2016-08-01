@@ -44,7 +44,7 @@ namespace LykkeWallet.Pages
             }
             catch (Exception ex)
             {
-                var a = 33;;
+                var a = 33; ;
             }
         }
 

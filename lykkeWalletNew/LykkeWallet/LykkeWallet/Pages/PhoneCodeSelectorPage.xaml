@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:customUi="clr-namespace:LykkeWallet.CustomUI;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.PhoneCodeSelectorPage"
+             Title="Lykke Wallet">
+  <ListView x:Name="listView"
+            HasUnevenRows="True"
+            ItemSelected="OnCountrySelected"
+            CachingStrategy="RecycleElement">
+    <ListView.ItemTemplate>
+      <DataTemplate>
+        <customUi:PhoneCodeCell Country="{Binding Country}" Code="{Binding Code}" />
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+</ContentPage>

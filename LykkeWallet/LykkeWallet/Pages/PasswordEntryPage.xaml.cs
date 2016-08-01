@@ -22,13 +22,13 @@ namespace LykkeWallet.Pages
             base.OnAppearing();
             passwordEntry.Focus();
         }
-        
-        private void OnSubmitButtonClicked(object sender, EventArgs e)
+
+        private async void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             submitButton.Clicked -= OnSubmitButtonClicked;
             var localStorage = new LocalKeyStorage();
             localStorage.Save(Constants.PASSWORD, passwordEntry.Text);
-            Navigation.PushAsync(new PasswordHintEntryPage(_email, passwordEntry.Text));
+            await Navigation.PushAsync(new PasswordHintEntryPage(_email, passwordEntry.Text));
             submitButton.Clicked += OnSubmitButtonClicked;
         }
 

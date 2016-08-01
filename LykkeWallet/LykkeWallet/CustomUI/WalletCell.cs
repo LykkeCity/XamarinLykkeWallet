@@ -30,11 +30,11 @@ namespace LykkeWallet.CustomUI
         public decimal Balance
         {
             set { _labelRightRight.Text = value.ToString(); }
-            get { return decimal.Parse(_labelRightRight.Text);  }
+            get { return decimal.Parse(_labelRightRight.Text); }
         }
 
         public WalletCell(/*string s, string symbol, decimal balance*/)
-        { 
+        {
             _labelLeft = new Label { HorizontalOptions = LayoutOptions.Start, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) };
             _labelRight = new Label { HorizontalOptions = LayoutOptions.EndAndExpand, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) };
             _labelRightRight = new Label { HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)) };

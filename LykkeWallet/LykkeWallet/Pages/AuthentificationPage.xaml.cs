@@ -28,7 +28,7 @@ namespace LykkeWallet.Pages
 
         private void VirtualClick(object sender, EventArgs e)
         {
-            if(submitButton.IsEnabled)
+            if (submitButton.IsEnabled)
                 OnSubmitButtonClicked(null, null);
         }
 
@@ -41,9 +41,9 @@ namespace LykkeWallet.Pages
                 var result = await WalletApiSingleton.Instance.AuthAsync(ViewModel.Email, ViewModel.Password);
                 if (!string.IsNullOrEmpty(result.EncodedPrivateKey))
                 {
-                    
+
                 }
-                Navigation.PushAsync(new MainTabbedPage(true));
+                await Navigation.PushAsync(new MainTabbedPage(true));
             }
             catch (InvalidUsernameOrPasswordException ex)
             {

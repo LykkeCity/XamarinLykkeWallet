@@ -44,9 +44,8 @@ namespace LykkeWallet.Pages
         {
             Task.Run(() =>
             {
-                Device.BeginInvokeOnMainThread(() => ViewModel.Wallets = new ObservableCollection<WalletGroup>());
-
                 var wallets = WalletApiSingleton.Instance.GetWallets().Result;
+                Device.BeginInvokeOnMainThread(() => ViewModel.Wallets = new ObservableCollection<WalletGroup>());
                 var orderedWallets = wallets.Lykke.Assets.OrderBy(x => x.IssuerId).ThenBy(x => x.Id).ToList();
                 string currentIssuer = null;
                 foreach (var wallet in orderedWallets)
@@ -64,15 +63,32 @@ namespace LykkeWallet.Pages
                     };
                     Device.BeginInvokeOnMainThread(() => ViewModel.Wallets.LastOrDefault().Add(walletCell));
                 }
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    if (walletsListView.IsRefreshing)
+                        walletsListView.EndRefresh();
+                });
             });
-                    
+
         }
 
-        private void OnWalletTapped(object sender, SelectedItemChangedEventArgs e)
+        private async void OnWalletTapped(object sender, SelectedItemChangedEventArgs e)
         {
-            var list = (ListView) sender;
-            list.SelectedItem = null;
+            var list = (ListView)sender;
+            if (list.SelectedItem != null)
+            {
+                var selectedWallet = (WalletCell)list.SelectedItem;
+                list.SelectedItem = null;
+                var walletDetailsPage = new WalletDetails();
+                walletDetailsPage.SetExternalData(selectedWallet.Balance, selectedWallet.Symbol);
+                walletDetailsPage.SetAsset(selectedWallet.Code);
+                await Navigation.PushAsync(walletDetailsPage);
+            }
+        }
+
+        private void OnListRefreshed(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
-
 }

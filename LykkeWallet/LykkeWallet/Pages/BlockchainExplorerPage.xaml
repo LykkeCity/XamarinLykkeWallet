@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="LykkeWallet.Pages.BlockchainExplorerPage"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             Title="Blockchain Explorer">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <viewModels:BlockchainExplorerPageViewModel x:Key="blockchainExplorerPageViewModel" x:Name="blockchainExplorerPageViewModel"/>
+      <converters:BlockchainDateToStringConverter x:Key="blockchainDateToStringConverter" x:Name="blockchainDateToStringConverter" />
+      <Style x:Key="InfoLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="Medium" />
+        <Setter Property="WidthRequest" Value="150" />
+        <Setter Property="VerticalOptions" Value="Start"/>
+      </Style>
+      <Style x:Key="DataLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="Medium" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
+      </Style>
+      <Style x:Key="HorizontalStack" TargetType="StackLayout">
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Padding" Value="10,10,10,20"/>
+      </Style>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ScrollView BindingContext="{StaticResource blockchainExplorerPageViewModel}">
+    <StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="Hash" Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding Hash}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="Date" Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding DateTime, Converter={StaticResource blockchainDateToStringConverter}}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="Confirm." Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding Confirmations, StringFormat='{0} confirmations'}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="Block" Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding Block}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="Height" Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding Height}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="Sender ID" Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding SenderId}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="Asset ID" Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding AssetId}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="Quanity" Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding Quantity}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+      <StackLayout Style="{StaticResource HorizontalStack}">
+        <Label Text="URL" Style="{StaticResource InfoLabel}" />
+        <Label Text="{Binding Url}" Style="{StaticResource DataLabel}" />
+      </StackLayout>
+    </StackLayout>
+  </ScrollView>
+</ContentPage>

@@ -22,7 +22,7 @@ namespace LykkeWallet.Pages
             base.OnAppearing();
             codeEntry.Focus();
         }
-        
+
         private async void OnSubmitButtonClicked(object sender, EventArgs e)
         {
             submitButton.Clicked -= OnSubmitButtonClicked;
@@ -41,11 +41,11 @@ namespace LykkeWallet.Pages
             submitButton.Clicked += OnSubmitButtonClicked;
         }
 
-        
+
 
         private void VirtualClick(object sender, EventArgs e)
         {
-            if(submitButton.IsEnabled)
+            if (submitButton.IsEnabled)
                 OnSubmitButtonClicked(null, null);
         }
     }

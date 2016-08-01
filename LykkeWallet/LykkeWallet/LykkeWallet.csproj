@@ -40,8 +40,13 @@
     <Compile Include="ApiAccess\Models.cs" />
     <Compile Include="ApiAccess\WalletApiSingleton.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="Converters\AmountInputToDecimalConverter.cs" />
+    <Compile Include="Converters\BlockchainDateToStringConverter.cs" />
     <Compile Include="Converters\DecimalPercentagetToStringConverter.cs" />
     <Compile Include="Converters\DecimalRateToStringConverter.cs" />
+    <Compile Include="Converters\DecimalToButtonEnabledConverter.cs" />
+    <Compile Include="Converters\DecimalToWithrdrawEnabledConverter.cs" />
+    <Compile Include="Converters\HistoryAmountToStringConverter.cs" />
     <Compile Include="Converters\ImageSourceToButtonEnabledConverter.cs" />
     <Compile Include="Converters\MailExistsToButtonEnabledConverter.cs" />
     <Compile Include="Converters\MailExistsToButtonTextConverter.cs" />
@@ -63,6 +68,12 @@
     <Compile Include="Pages\BaseAssetSelectionPage.xaml.cs">
       <DependentUpon>BaseAssetSelectionPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\BlockchainExplorerPage.xaml.cs">
+      <DependentUpon>BlockchainExplorerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DepositBtcPage.xaml.cs">
+      <DependentUpon>DepositBtcPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ExchangeDetailsPage.xaml.cs">
       <DependentUpon>ExchangeDetailsPage.xaml</DependentUpon>
     </Compile>
@@ -78,6 +89,9 @@
     <Compile Include="Pages\MyLykkePage.xaml.cs">
       <DependentUpon>MyLykkePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\Page1.xaml.cs">
+      <DependentUpon>Page1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PersonalDataInfoPage.xaml.cs">
       <DependentUpon>PersonalDataInfoPage.xaml</DependentUpon>
     </Compile>
@@ -90,8 +104,20 @@
     <Compile Include="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TradingPage.xaml.cs">
+      <DependentUpon>TradingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WalletDetails.xaml.cs">
+      <DependentUpon>WalletDetails.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\WalletPage.xaml.cs">
       <DependentUpon>WalletPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WithdrawBtcAddressPage.xaml.cs">
+      <DependentUpon>WithdrawBtcAddressPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WithdrawFundsAmountPage.xaml.cs">
+      <DependentUpon>WithdrawFundsAmountPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="MarkupExtensions\ImageResourceExtension.cs" />
@@ -133,6 +159,7 @@
     <Compile Include="Utils\DateTimeUtils.cs" />
     <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="ViewModels\AuthentificationPageViewModel.cs" />
+    <Compile Include="ViewModels\BlockchainExplorerPageViewModel.cs" />
     <Compile Include="ViewModels\ExchangeDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\ExchangePageViewModel.cs" />
     <Compile Include="ViewModels\HistoryPageViewModel.cs" />
@@ -145,7 +172,9 @@
     <Compile Include="ViewModels\PasswordHintEntryPageViewModel.cs" />
     <Compile Include="ViewModels\PhoneEntryPageViewModel.cs" />
     <Compile Include="ViewModels\SelfiePickerPageViewModel.cs" />
+    <Compile Include="ViewModels\WalletDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\WalletPageViewModel.cs" />
+    <Compile Include="ViewModels\WithdrawFundsAmountPageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NBitcoin, Version=3.0.0.38, Culture=neutral, processorArchitecture=MSIL">
@@ -212,6 +241,18 @@
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.0.0.6482\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ZXing.Net.Mobile.Core, Version=2.1.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ZXing.Net.Mobile.2.1.13\lib\portable-net45+netcore45+wpa81+wp8\ZXing.Net.Mobile.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="zxing.portable, Version=2.1.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ZXing.Net.Mobile.2.1.13\lib\portable-net45+netcore45+wpa81+wp8\zxing.portable.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ZXingNetMobile, Version=2.1.13.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\ZXing.Net.Mobile.2.1.13\lib\portable-net45+netcore45+wpa81+wp8\ZXingNetMobile.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -358,6 +399,36 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\ic_swap_horiz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\BlockchainExplorerPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\DepositBtcPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\Page1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\TradingPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\WalletDetails.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\WithdrawBtcAddressPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\WithdrawFundsAmountPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.0.0.6482\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.0.0.6482\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />

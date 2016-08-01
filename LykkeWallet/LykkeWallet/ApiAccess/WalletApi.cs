@@ -69,7 +69,7 @@ namespace LykkeWallet.ApiAccess
 
         public Task PostClientKeys(string pubKey, string encodedPrivateKey)
         {
-            return DoPostRequestAsync("ClientKeys", new {pubKey, encodedPrivateKey});
+            return DoPostRequestAsync("ClientKeys", new { pubKey, encodedPrivateKey });
         }
 
         public Task<PersonalDataRespModel> GetPersonalDataAsync()
@@ -99,13 +99,13 @@ namespace LykkeWallet.ApiAccess
 
         public Task<CheckEmailVerificationRespModel> GetEmailVerification(string email, string code)
         {
-            
+
             return DoGetRequestAsync<CheckEmailVerificationRespModel>("EmailVerification", new { email = email, code = code });
         }
 
         public Task PostEmailVerification(string email)
         {
-            return DoPostRequestAsync("EmailVerification", new {Email = email});
+            return DoPostRequestAsync("EmailVerification", new { Email = email });
         }
         public Task<CheckMobilePhoneRespModel> GetCheckMobilePhone(string phone, string code)
         {
@@ -119,7 +119,7 @@ namespace LykkeWallet.ApiAccess
 
         public Task PostClientFullName(string fullName)
         {
-            return DoPostRequestAsync("ClientFullName", new {FullName = fullName});
+            return DoPostRequestAsync("ClientFullName", new { FullName = fullName });
         }
         public Task SetPinCodeAsync(string pin)
         {
@@ -145,7 +145,12 @@ namespace LykkeWallet.ApiAccess
 
         public Task<AssetPairRateRespModel> GetAssetPairRates(string id)
         {
-            return DoGetRequestAsync<AssetPairRateRespModel>("AssetPairRates", new {Id = id});
+            return DoGetRequestAsync<AssetPairRateRespModel>("AssetPairRates", new { Id = id });
+        }
+
+        public Task<AssetRespModel> GetAsset(string id)
+        {
+            return DoGetRequestAsync<AssetRespModel>("Assets", new { id });
         }
 
         public Task<BaseAssetRespModel> GetBaseAsset()
@@ -164,7 +169,7 @@ namespace LykkeWallet.ApiAccess
 
         public Task<AssetDescriptionRespModel> GetAssetDescription(string id)
         {
-            return DoGetRequestAsync<AssetDescriptionRespModel>("AssetDescription", new {id});
+            return DoGetRequestAsync<AssetDescriptionRespModel>("AssetDescription", new { id });
         }
 
         public Task<AssetPairDetailedRateRespModel> GetAssetPairDetailedRates(string assetId, string period, int points)
@@ -179,7 +184,7 @@ namespace LykkeWallet.ApiAccess
 
         public Task<AssetPairRespModel> GetAssetPair(string id)
         {
-            return DoGetRequestAsync<AssetPairRespModel>("AssetPair", new {id});
+            return DoGetRequestAsync<AssetPairRespModel>("AssetPair", new { id });
         }
 
         public Task<GraphPeriodsRespModel> GetGraphPeriods()
@@ -189,7 +194,17 @@ namespace LykkeWallet.ApiAccess
 
         public Task PostInvertAssetPair(string id, string inverted)
         {
-            return DoPostRequestAsync("InvertedAssetPairs", new {AssetPairId = id, Inverted = inverted});
+            return DoPostRequestAsync("InvertedAssetPairs", new { AssetPairId = id, Inverted = inverted });
+        }
+
+        public Task<BcnTransactionRespModel> GetBcnTransaction(string id)
+        {
+            return DoGetRequestAsync<BcnTransactionRespModel>("BcnTransaction", new { id });
+        }
+
+        public Task<List<HistoryItemModel>> GetHistory()
+        {
+            return DoGetRequestAsync<List<HistoryItemModel>>("History");
         }
     }
 }

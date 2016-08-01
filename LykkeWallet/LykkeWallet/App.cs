@@ -16,8 +16,8 @@ namespace LykkeWallet
         public App()
         {
             //weird();
-            var localStorage = new LocalKeyStorage();
-            localStorage.Save(WalletApi.TokenName, null);
+            //var localStorage = new LocalKeyStorage();
+            //localStorage.Save(WalletApi.TokenName, null);
             MainPage = new NavigationPage(new LoginPage());
         }
 

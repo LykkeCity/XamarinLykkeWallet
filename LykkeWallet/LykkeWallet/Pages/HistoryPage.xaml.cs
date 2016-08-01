@@ -6,11 +6,14 @@ using System.Text;
 using System.Threading.Tasks;
 using LykkeWallet.ViewModels;
 using Xamarin.Forms;
+using LykkeWallet.ApiAccess;
+using LykkeWallet.CustomUI;
 
 namespace LykkeWallet.Pages
 {
     public class HistoryCellData
     {
+        public string Id { set; get; }
         public string Action { set; get; }
         public string Date { set; get; }
         public decimal Amount { set; get; }
@@ -25,23 +28,12 @@ namespace LykkeWallet.Pages
         public HistoryPage()
         {
             InitializeComponent();
-
-            var data = new ObservableCollection<HistoryCellData>
-                    {
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m}
-                    };
-            ViewModel.HistoryData = data;
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-           // _storage = historyListView.SelectedItem;
+            // _storage = historyListView.SelectedItem;
             //historyListView.SelectedItem = null;
         }
 
@@ -57,9 +49,64 @@ namespace LykkeWallet.Pages
             Task.Run(
                 () =>
                 {
-                    ViewModel.HistoryData.Add(new HistoryCellData { Amount = 654, Action = "added during refresh", Date = DateTime.Now.ToString() });
+                    var data = WalletApiSingleton.Instance.GetHistory().Result;
+                    var collection = new ObservableCollection<HistoryCellData>();
+
+                    foreach (var item in data)
+                    {
+                        try
+                        {
+
+                            var historyItem = new HistoryCellData();
+
+                            historyItem.Id = item.Id;
+                            var asset = string.Empty;
+                            if (item.CashInOut != null)
+                            {
+                                //historyItem.Action = item.CashInOut;
+                                historyItem.Amount = item.CashInOut.Amount;
+                                var action = item.CashInOut.Amount > 0m ? "Cash In" : "Cash Out";
+                                historyItem.Action = $"{item.CashInOut.Asset} {action}";
+                            }
+                            if (item.Trade != null)
+                            {
+                                //historyItem.Action = item.Trade.
+                                historyItem.Amount = item.Trade.Volume;
+                                var action = item.Trade.Volume > 0m ? "Buy" : "Sell";
+                                historyItem.Action = $"{item.Trade.Asset} {action}";
+                            }
+                            if (item.Transfer != null)
+                            {
+                                historyItem.Amount = item.Transfer.Volume;
+                                var action = item.Transfer.Volume > 0m ? "Income" : "Outcome";
+                                historyItem.Action = $"{item.Transfer.Asset} {action}";
+                            }
+                            if (item.CashOutAttemp != null)
+                            {
+                                historyItem.Amount = item.CashOutAttemp.Volume;
+                            }
+                            if (item.CashOutCancelled != null)
+                            {
+                                historyItem.Amount = item.CashOutCancelled.Volume;
+                            }
+                            if (item.CashOutDone != null)
+                            {
+                                historyItem.Amount = item.CashOutDone.Volume;
+                            }
+
+                            historyItem.Date = item.DateTime.ToString();
+
+                            collection.Add(historyItem);
+                        }
+                        catch (Exception ex)
+                        {
+                            var a = 234;
+                        }
+                    }
+
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        ViewModel.HistoryData = collection;
                         if (historyListView.IsRefreshing)
                             historyListView.EndRefresh();
                     });
@@ -71,9 +118,17 @@ namespace LykkeWallet.Pages
             RefreshData();
         }
 
-        private void OnHistoryItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void OnHistoryItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            ((ListView)sender).SelectedItem = null;
+            var list = (ListView)sender;
+            if (list.SelectedItem != null)
+            {
+                var selectedItem = (HistoryCellData)list.SelectedItem;
+                list.SelectedItem = null;
+                var blockchainExplorerPage = new BlockchainExplorerPage();
+                blockchainExplorerPage.SetBlockchainInfo(selectedItem.Id);
+                await Navigation.PushAsync(blockchainExplorerPage);
+            }
         }
     }
 }

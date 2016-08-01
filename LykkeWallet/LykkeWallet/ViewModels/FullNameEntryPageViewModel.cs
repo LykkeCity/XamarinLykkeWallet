@@ -9,7 +9,7 @@ using LykkeWallet.Annotations;
 
 namespace LykkeWallet.ViewModels
 {
-    class FullNameEntryPageViewModel :INotifyPropertyChanged
+    class FullNameEntryPageViewModel : INotifyPropertyChanged
     {
         private string _fullNameEntry;
         private bool _fullNameValid;

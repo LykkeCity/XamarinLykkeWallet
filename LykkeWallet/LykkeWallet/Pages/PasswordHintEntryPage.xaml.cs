@@ -38,12 +38,12 @@ namespace LykkeWallet.Pages
         {
             await WalletApiSingleton.Instance.RegisterAccount(_email, "", "", _password, hintEntry.Text, "");
 
-            Navigation.PushAsync(new FullNameEntryPage());
+            await Navigation.PushAsync(new FullNameEntryPage());
         }
 
         private void VirtualClick(object sender, EventArgs e)
         {
-            if(submitButton.IsEnabled)
+            if (submitButton.IsEnabled)
                 OnSubmitButtonClicked(null, null);
         }
     }

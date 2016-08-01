@@ -116,21 +116,31 @@ namespace LykkeWallet.ApiAccess
         public string Ask { set; get; }
     }
 
-    public class BaseAssetRespModel
+    public class AssetsRespModel
     {
-        public AssetRespModel Asset { set; get; }
-    }
-
-    public class AllBaseAssetsRespModel
-    {
-        public List<AssetRespModel> Assets { set; get; }
+        public List<AssetModel> Assets { set; get; }
     }
 
     public class AssetRespModel
     {
+        public AssetModel Asset { set; get; }
+    }
+
+    public class BaseAssetRespModel
+    {
+        public AssetModel Asset { set; get; }
+    }
+
+    public class AllBaseAssetsRespModel
+    {
+        public List<AssetModel> Assets { set; get; }
+    }
+
+    public class AssetModel
+    {
         public string Id { set; get; }
         public string Name { set; get; }
-        public double Accuracy { set; get; }
+        public int Accuracy { set; get; }
         public string Symbol { set; get; }
         public bool HideWithdraw { set; get; }
         public bool HideDeposit { set; get; }
@@ -294,6 +304,43 @@ namespace LykkeWallet.ApiAccess
         public string Asset { set; get; }
         public decimal Volume { set; get; }
         public string IconId { set; get; }
+    }
+
+    public class HistoryItemModel
+    {
+        public string Id { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public TransactionsCashInOutModel CashInOut { set; get; }
+        public TransactionTradeModel Trade { set; get; }
+        public TrasactionTransferModel Transfer { set; get; }
+        public TransactionCashOutAttemptsModel CashOutAttemp { set; get; }
+        public TransactionCashOutCancelledModel CashOutCancelled { set; get; }
+        public TransactionCashOutDoneModel CashOutDone { set; get; }
+    }
+
+    public class HistoryRespModel
+    {
+
+    }
+
+    public class BcnTransactionRespModel
+    {
+        public BcnTransactionModel Transaction { get; set; }
+    }
+
+    public class BcnTransactionModel
+    {
+        public string Hash { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime Date { set; get; }
+        public int Confirmations { set; get; }
+        public string Block { set; get; }
+        public string Height { set; get; }
+        public string SenderId { set; get; }
+        public string AssetId { set; get; }
+        public string Quantity { set; get; }
+        public string Url { set; get; }
     }
 
 }

@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using ZXing.Mobile;
 
 namespace LykkeWallet.Droid
 {
@@ -17,6 +18,7 @@ namespace LykkeWallet.Droid
         {
 
             base.OnCreate(bundle);
+            MobileBarcodeScanner.Initialize(Application);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());

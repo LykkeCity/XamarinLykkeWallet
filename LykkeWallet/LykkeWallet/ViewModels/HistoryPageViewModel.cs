@@ -26,7 +26,7 @@ namespace LykkeWallet.ViewModels
                 }
             }
         }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

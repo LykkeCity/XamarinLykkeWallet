@@ -19,7 +19,7 @@ namespace LykkeWallet.Pages
     {
         private long _requestNumber;
         private LoginPageViewModel ViewModel => loginPageViewModel;
-
+        private DateTime mLastClickTime;
         public LoginPage()
         {
             InitializeComponent();
@@ -29,12 +29,12 @@ namespace LykkeWallet.Pages
             serverPicker.SelectedIndex = 1;
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             var localStorage = new LocalKeyStorage();
             if (!string.IsNullOrEmpty(localStorage.Get(WalletApi.TokenName)))
             {
-                Navigation.PushAsync(new MainTabbedPage(true));
+                await Navigation.PushAsync(new MainTabbedPage(true));
             }
             else
             {
@@ -51,21 +51,25 @@ namespace LykkeWallet.Pages
 
         private async void OnSubmitButton(object sender, EventArgs e)
         {
-            submitButton.Clicked -= OnSubmitButton;
+            if (DateTime.Now - mLastClickTime < new TimeSpan(0, 0, 0, 0, 1000))
+            {
+                return;
+            }
+            mLastClickTime = DateTime.Now;
+
+            Debug.WriteLine("asdfasdfasdf");
             if (ViewModel.MailStatus != MailStatus.InvalidEmail)
             {
                 if (ViewModel.MailStatus == MailStatus.ExistingEmail)
                 {
-                    Navigation.PushAsync(new AuthentificationPage(mailEntry.Text));
+                    await Navigation.PushAsync(new AuthentificationPage(mailEntry.Text));
                 }
                 else
                 {
                     await WalletApiSingleton.Instance.PostEmailVerification(mailEntry.Text);
-                    Navigation.PushAsync(new EmailConfirmPage(mailEntry.Text));
+                    await Navigation.PushAsync(new EmailConfirmPage(mailEntry.Text));
                 }
             }
-
-            submitButton.Clicked += OnSubmitButton;
         }
 
         private async void OnTextChanged(object sender, TextChangedEventArgs e)
@@ -105,7 +109,7 @@ namespace LykkeWallet.Pages
 
         private void VirtualClick(object sender, EventArgs e)
         {
-            if(submitButton.IsEnabled)
+            if (submitButton.IsEnabled)
                 OnSubmitButton(null, null);
 
         }

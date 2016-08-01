@@ -51,7 +51,7 @@ namespace LykkeWallet.ViewModels
                 if (value != _apiServer)
                 {
                     _apiServer = value;
-                    
+
                     OnPropertyChanged();
                 }
             }

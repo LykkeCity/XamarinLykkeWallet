@@ -187,9 +187,9 @@ namespace LykkeWallet.Pages
         {
             if (IsInverted)
             {
-                _regularAsk = _invertedAsk != 0m ? Math.Round(1m/_invertedAsk, _regularAccuracy) : 0m;
+                _regularAsk = _invertedAsk != 0m ? Math.Round(1m / _invertedAsk, _regularAccuracy) : 0m;
 
-                _regularBid = _invertedBid != 0m ? Math.Round(1m/_invertedBid, _regularAccuracy) : 0m;
+                _regularBid = _invertedBid != 0m ? Math.Round(1m / _invertedBid, _regularAccuracy) : 0m;
 
                 var temp = _regularAsk;
 
@@ -197,7 +197,7 @@ namespace LykkeWallet.Pages
 
                 _regularBid = temp;
 
-                _regularPercentage = (1m/(_invertedPercentage/100m + 1m) - 1m) * 100m; //TODO make sure _invertedPercentage != 0
+                _regularPercentage = (1m / (_invertedPercentage / 100m + 1m) - 1m) * 100m; //TODO make sure _invertedPercentage != 0
 
                 //_regularExchangeRate = _invertedExchangeRate != 0m ? Math.Round(1/ _invertedExchangeRate, _regularAccuracy) : 0m;
             }
@@ -337,7 +337,7 @@ namespace LykkeWallet.Pages
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         ViewModel.ExchangeRates = list;
-                        if(exchageRatesListView.IsRefreshing)
+                        if (exchageRatesListView.IsRefreshing)
                             exchageRatesListView.EndRefresh();
                     });
                     if (selectedAsset != null)
@@ -348,21 +348,21 @@ namespace LykkeWallet.Pages
                     var a = 234;
                 }
             });
-                    
+
         }
 
-        private void OnPairSelected(object sender, ItemTappedEventArgs e)
+        private async void OnPairSelected(object sender, ItemTappedEventArgs e)
         {
 
             var s = (ExhcangeRateModel)((ListView)sender).SelectedItem;
 
-            ((ListView) sender).SelectedItem = null;
+            ((ListView)sender).SelectedItem = null;
 
             var detailsPage = new ExchangeDetailsPage();
             detailsPage.RefreshButtons();
             detailsPage.RefreshData(s.Id);
             detailsPage.SetAssetDescription(s.Id);
-            Navigation.PushAsync(detailsPage);
+            await Navigation.PushAsync(detailsPage);
         }
 
         private void OnListRefreshed(object sender, EventArgs e)

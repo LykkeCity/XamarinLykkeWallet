@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:lykkeWallet="clr-namespace:LykkeWallet;assembly=LykkeWallet"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.ExchangeDetailsPage">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <viewModels:ExchangeDetailsPageViewModel x:Key="exchangeDetailsPageViewModel" x:Name="exchangeDetailsPageViewModel"/>
+      <converters:DecimalPercentagetToStringConverter x:Key="decimalPercentagetToStringConverter" x:Name="decimalPercentagetToStringConverter" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ContentPage.ToolbarItems>
+    <ToolbarItem x:Name="invertToolbarItem" Text="Create" Icon="ic_swap_horiz.png" Clicked="InvertPair"></ToolbarItem>
+  </ContentPage.ToolbarItems>
+  <StackLayout Padding="15, 20, 15, 0" BindingContext="{StaticResource exchangeDetailsPageViewModel}">
+    <StackLayout Orientation="Horizontal">
+      <Label FontSize="Large"
+             HorizontalOptions="Start"
+             Text="{Binding AssetFrom}"/>
+      <Label FontSize="Large"
+             HorizontalOptions="Start"
+             Text="/"/>
+      <Label FontSize="Large"
+             HorizontalOptions="Start"
+             Text="{Binding AssetTo}"/>
+    </StackLayout>
+    <StackLayout Orientation="Horizontal"
+                 Padding="0, 15, 0, 30">
+      <StackLayout HorizontalOptions="Start">
+        <Label FontSize="Small">Last price</Label>
+        <Label FontSize="Large" Text="{Binding LastPrice}" />
+      </StackLayout>
+      <StackLayout HorizontalOptions="EndAndExpand">
+        <Label FontSize="Small">Change</Label>
+        <StackLayout Orientation="Horizontal">
+          <Image x:Name="img"
+                 Source="{lykkeWallet:ImageResource LykkeWallet.Images.ic_call_made.png}"
+                 HorizontalOptions="Start"/>
+          <Frame Padding="5, 0, 5, 5">
+            <Label FontSize="Large"
+                   HorizontalOptions="Start"
+                   Text="{Binding Change}"/>
+          </Frame>
+          <Label FontSize="Small"
+                 HorizontalOptions="Start"
+                 VerticalOptions="Center"
+                 Text="{Binding Percentage, StringFormat='({0})', Converter={StaticResource decimalPercentagetToStringConverter}}"/>
+        </StackLayout>
+      </StackLayout>
+    </StackLayout>
+    <StackLayout x:Name="periodsStack"
+                 Orientation="Horizontal"
+                 HorizontalOptions="FillAndExpand">
+    </StackLayout>
+    <StackLayout Orientation="Horizontal"
+                 HorizontalOptions="FillAndExpand"
+                 Padding="0, 15, 0, 0">
+      <Button Text="{Binding Ask, StringFormat='Buy at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
+      <Button Text="{Binding Bid, StringFormat='Sell at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
+    </StackLayout>
+    <ListView x:Name="assetDataList" ItemsSource="{Binding AssetDetails}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ImageCell
+            Text="{Binding PrimaryText}"
+            Detail="{Binding SecondaryText}"
+            ImageSource="{Binding Image}">
+          </ImageCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </StackLayout>
+</ContentPage>

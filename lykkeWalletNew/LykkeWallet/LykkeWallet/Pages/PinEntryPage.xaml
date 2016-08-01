@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.PinEntryPage"
+             Title="Lykke Wallet">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:PinToButtonEnabledConverter x:Key="pinToButtonEnabledConverter" x:Name="pinToButtonEnabledConverter"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <StackLayout Padding="20, 50, 20, 20"
+               VerticalOptions="Start">
+    <Label x:Name="infoLabel"
+           VerticalOptions="Start"
+           HorizontalOptions="Center"
+           FontSize="Medium"
+           HorizontalTextAlignment="Center"
+           Text="Enter pin code"/>
+    <Frame Padding="20, 20, 20, 0">
+      <Entry x:Name="pinEntry"
+             IsPassword="True"
+          HorizontalTextAlignment="Center"
+          Keyboard="Numeric"
+          Text=""
+          VerticalOptions="Start"
+          HorizontalOptions="FillAndExpand"
+          FontSize="Medium"
+          Completed="VirtualClick"
+          TextChanged="OnPinChanged"/>
+    </Frame>
+    <Frame Padding="20,20,20,0">
+      <Button x:Name="submitButton"
+        Text="Next"
+        VerticalOptions="Start"
+        HorizontalOptions="FillAndExpand"
+        HeightRequest="60"
+        FontSize="Medium"
+        IsEnabled="{Binding Text, Source={x:Reference pinEntry}, Mode=OneWay, Converter={StaticResource pinToButtonEnabledConverter}}"
+        Clicked="OnSubmitButtonClicked"/>
+    </Frame>
+    <Frame Padding="20,20,20,0">
+      <ActivityIndicator HorizontalOptions="CenterAndExpand" x:Name="indicator"></ActivityIndicator>
+    </Frame>
+  </StackLayout>
+</ContentPage>

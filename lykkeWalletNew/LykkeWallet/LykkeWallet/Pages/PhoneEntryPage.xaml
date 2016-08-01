@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.PhoneEntryPage"
+             Title="Lykke Wallet">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <viewModels:PhoneEntryPageViewModel x:Key="phoneEntryPageViewModel" x:Name="phoneEntryPageViewModel"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <StackLayout Padding="20, 50, 20, 20"
+               VerticalOptions="Start"
+                   BindingContext="{StaticResource phoneEntryPageViewModel}">
+    <Label x:Name="infoLabel"
+           VerticalOptions="Start"
+           HorizontalOptions="Center"
+           FontSize="Medium"
+           HorizontalTextAlignment="Center"
+           Text="Enter your phone number"/>
+    <Frame Padding="20, 20, 20, 0">
+      <Label x:Name="countryLabel"
+            VerticalOptions="Start"
+            HorizontalOptions="Center"
+            FontSize="Medium"
+             Text="{Binding CurrentCountryCode.Country}"/>
+    </Frame>
+    <Frame Padding="20, 20, 20, 0">
+      <Button x:Name="countrySelectorButton"
+            VerticalOptions="Start"
+            HorizontalOptions="Center"
+            FontSize="Medium"
+            Text="Change Country"
+              Clicked="OnCountrySelectorButtonClicked"/>
+    </Frame>
+    <Frame Padding="20, 20, 20, 0">
+      <StackLayout Orientation="Horizontal" BackgroundColor="Gray">
+        <Frame Padding="8, 10, 0, 0">
+          <Label x:Name="prefixLabel" Text="{Binding CurrentCountryCode.Code, StringFormat='+{0} |'}" FontSize="Large" BackgroundColor="Transparent" />
+        </Frame>
+        <Entry x:Name="phoneEntry"
+            Keyboard="Telephone"
+            Placeholder="Phone number"
+            VerticalOptions="Start"
+            HorizontalOptions="FillAndExpand"
+            FontSize="Medium"
+             Text="{Binding Phone}"
+             Completed="VirtualClick"/>
+      </StackLayout>
+    </Frame>
+    <Frame Padding="20,20,20,0">
+      <Button x:Name="submitButton"
+        Text="Next"
+        VerticalOptions="Start"
+        HorizontalOptions="FillAndExpand"
+        HeightRequest="60"
+        FontSize="Medium"
+        IsEnabled="{Binding PhoneValid}"
+        Clicked="OnSubmitButtonClicked"/>
+    </Frame>
+  </StackLayout>
+
+</ContentPage>

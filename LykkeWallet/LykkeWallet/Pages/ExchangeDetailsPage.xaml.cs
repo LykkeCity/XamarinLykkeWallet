@@ -144,7 +144,7 @@ namespace LykkeWallet.Pages
                         var b = ((assetPair.Inverted ? 1.0 / assetPair3.Rate.ChngGrph.Last() : assetPair3.Rate.ChngGrph.Last()) - (assetPair.Inverted ? 1.0 / assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2] : assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2])).ToString();
                         ViewModel.Change =
                             Math.Round(Convert.ToDecimal(
-                                ((assetPair.Inverted ? 1.0/assetPair3.Rate.ChngGrph.Last() : assetPair3.Rate.ChngGrph.Last()) - (assetPair.Inverted ? 1.0/ assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2] : assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2]))),
+                                ((assetPair.Inverted ? 1.0 / assetPair3.Rate.ChngGrph.Last() : assetPair3.Rate.ChngGrph.Last()) - (assetPair.Inverted ? 1.0 / assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2] : assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2]))),
                                     assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy);
                         ViewModel.Percentage = assetPair3.Rate.PChange == 0m ? 0m : (assetPair.Inverted ? (1m / (assetPair3.Rate.PChange / 100m + 1m) - 1m) * 100m : assetPair3.Rate.PChange);
                         ViewModel.LastPrice = Math.Round(assetPair.Inverted ? 1m / assetPair3.LastPrice : assetPair3.LastPrice, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy);
