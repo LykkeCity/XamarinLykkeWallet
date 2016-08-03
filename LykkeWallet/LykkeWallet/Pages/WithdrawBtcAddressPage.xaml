@@ -22,7 +22,7 @@
       <Button Text="QR" HorizontalOptions="End" Clicked="OnQRButtonClicked" />
     </StackLayout>
     <Frame Padding="0,20,0,0">
-      <Button Text="Proceed" FontSize="Medium" Clicked="OnProceedButtonClicked" IsEnabled="{Binding AddressIsValid}" HorizontalOptions="EndAndExpand" VerticalOptions="Start"/>
+      <Button Text="Proceed" x:Name="proceedButton" FontSize="Medium" Clicked="OnProceedButtonClicked" IsEnabled="{Binding AddressIsValid}" HorizontalOptions="EndAndExpand" VerticalOptions="Start"/>
     </Frame>
   </StackLayout>
 </ContentPage>

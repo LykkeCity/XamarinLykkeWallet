@@ -205,6 +205,10 @@ namespace LykkeWallet.ApiAccess
         {
             return DoGetRequestAsync<List<HistoryItemModel>>("History");
         }
+        public Task<List<HistoryItemModel>> GetHistory(string assetId)
+        {
+            return DoGetRequestAsync<List<HistoryItemModel>>("History", new { assetId });
+        }
 
         public Task<SendBlockchainEmailRespModel> PostSendBlockchainEmail(string assetId)
         {

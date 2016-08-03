@@ -10,6 +10,9 @@
       <viewModels:HistoryPageViewModel x:Key="historyPageViewModel" x:Name="historyPageViewModel"/>
     </ResourceDictionary>
   </ContentPage.Resources>
+  <Frame x:Name="activityIndicatorFrame" Padding="0,30,0,0" IsVisible="False">
+    <ActivityIndicator HorizontalOptions="CenterAndExpand" x:Name="activityIndicator" IsVisible="False"  IsRunning="False"/>
+  </Frame>
   <ListView BindingContext="{StaticResource historyPageViewModel}"
             x:Name="historyListView"
             ItemsSource="{Binding HistoryData}"

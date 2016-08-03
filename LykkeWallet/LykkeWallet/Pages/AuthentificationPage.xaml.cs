@@ -41,13 +41,13 @@ namespace LykkeWallet.Pages
             try
             {
                 var result = await WalletApiSingleton.Instance.AuthAsync(ViewModel.Email, ViewModel.Password);
-                string pk = result.EncodedPrivateKey;
+                string pk = result.EncodedPrivateKey.TrimEnd('\0');
                 if(string.IsNullOrEmpty(result.EncodedPrivateKey))
                 {
                     var r = await WalletApiSingleton.Instance.PostEncodedPrivateKey(ViewModel.Password);
                     pk = r.EncodedPrivateKey;
                 }
-                var decodedPk = AESHelper.DecryptHex128(pk, ViewModel.Password);
+                var decodedPk = AESHelper.DecryptHex128(pk, ViewModel.Password).TrimEnd('\0');
                 LocalKeyAccessSingleton.Instance.SavePrivateKey(decodedPk);
                 LocalKeyAccessSingleton.Instance.AddOrUpdateEmailKeyPair(ViewModel.Email, result.EncodedPrivateKey);
                 

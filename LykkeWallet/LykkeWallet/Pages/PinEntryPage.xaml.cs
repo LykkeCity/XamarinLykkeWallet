@@ -34,23 +34,32 @@ namespace LykkeWallet.Pages
 
         private async void OnSubmitButtonClicked(object sender, EventArgs e)
         {
-            submitButton.Clicked -= OnSubmitButtonClicked;
-            Device.BeginInvokeOnMainThread(() => indicator.IsRunning = true);
-            var resp = await WalletApiSingleton.Instance.CheckPinCodeAsync(pinEntry.Text);
-            if (resp.Passed)
+            try
             {
-                _mainTabbedPage.InitializeChildren();
 
-                await Navigation.PopModalAsync();
+                submitButton.Clicked -= OnSubmitButtonClicked;
+                Device.BeginInvokeOnMainThread(() => indicator.IsRunning = true);
+                var resp = await WalletApiSingleton.Instance.CheckPinCodeAsync(pinEntry.Text);
+                if (resp.Passed)
+                {
+                    _mainTabbedPage.InitializeChildren();
+
+                    await Navigation.PopModalAsync();
+                }
+                else
+                {
+                    await DisplayAlert("", "Pin is incorrect", "OK");
+                    pinEntry.Text = "";
+                    pinEntry.Focus();
+                }
+                Device.BeginInvokeOnMainThread(() => indicator.IsRunning = false);
+                submitButton.Clicked += OnSubmitButtonClicked;
+
             }
-            else
+            catch (Exception ex)
             {
-                await DisplayAlert("", "Pin is incorrect", "OK");
-                pinEntry.Text = "";
-                pinEntry.Focus();
+                var a = 234;
             }
-            Device.BeginInvokeOnMainThread(() => indicator.IsRunning = false);
-            submitButton.Clicked += OnSubmitButtonClicked;
         }
 
         private void VirtualClick(object sender, EventArgs e)

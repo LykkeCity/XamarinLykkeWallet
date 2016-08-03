@@ -17,6 +17,9 @@
                    VerticalOptions="StartAndExpand">
       </StackLayout>
     </ScrollView>
+    <Frame x:Name="activityIndicatorFrame" Padding="0,30,0,0" IsVisible="False">
+      <ActivityIndicator HorizontalOptions="CenterAndExpand" x:Name="activityIndicator" IsVisible="False"  IsRunning="False"/>
+    </Frame>
     <ListView x:Name="exchageRatesListView"  ItemsSource="{Binding ExchangeRates}" ItemTapped="OnPairSelected" IsPullToRefreshEnabled="True" Refreshing="OnListRefreshed">
       <ListView.ItemTemplate>
         <DataTemplate>

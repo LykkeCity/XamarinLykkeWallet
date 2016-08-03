@@ -25,6 +25,15 @@ namespace LykkeWallet.Pages
         private HistoryPageViewModel ViewModel => historyPageViewModel;
         private List<HistoryItemModel> _fullList;
         private BlockchainExplorerPage _blockchainExplorerPage = new BlockchainExplorerPage();
+        private bool _isActivityRunning;
+
+        private void SetActivityRunning(bool b)
+        { 
+            activityIndicatorFrame.IsVisible = b;
+            activityIndicator.IsVisible = b;
+            activityIndicator.IsRunning = b;
+            _isActivityRunning = b;
+        }
 
         public HistoryPage()
         {
@@ -37,11 +46,16 @@ namespace LykkeWallet.Pages
             //_blockchainExplorerPage = new BlockchainExplorerPage();
         }
 
-        public void RefreshData()
+        public void RefreshData(bool isRefreshing = false)
         {
             Task.Run(
                 () =>
                 {
+                    Device.BeginInvokeOnMainThread(() => {
+                        if (!isRefreshing)
+                            SetActivityRunning(true);
+                    });
+
                     var data = WalletApiSingleton.Instance.GetHistory().Result;
                     _fullList = data;
                     var collection = new ObservableCollection<HistoryCellData>();
@@ -50,7 +64,6 @@ namespace LykkeWallet.Pages
                     {
                         try
                         {
-
                             var historyItem = new HistoryCellData();
 
                             historyItem.Id = item.Id;
@@ -101,18 +114,26 @@ namespace LykkeWallet.Pages
                         }
                     }
 
-                    Device.BeginInvokeOnMainThread(() =>
+                    try
                     {
-                        ViewModel.HistoryData = collection;
-                        if (historyListView.IsRefreshing)
-                            historyListView.EndRefresh();
-                    });
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            SetActivityRunning(false);
+                            ViewModel.HistoryData = collection;
+                            if (historyListView.IsRefreshing)
+                                historyListView.EndRefresh();
+
+                        });
+                    } catch(Exception ex)
+                    {
+                        var a = 234;
+                    }
                 });
         }
 
         private void OnHistoryRefresh(object sender, EventArgs e)
         {
-            RefreshData();
+            RefreshData(isRefreshing:true);
         }
 
         private async void OnHistoryItemSelected(object sender, SelectedItemChangedEventArgs e)

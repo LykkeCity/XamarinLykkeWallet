@@ -16,6 +16,17 @@ namespace LykkeWallet.Pages
     {
         private WalletDetailsPageViewModel ViewModel => walletDetailsPageViewModel;
 
+        private List<HistoryItemModel> _fullList;
+        private bool _isActivityRunning;
+
+        private void SetActivityRunning(bool b)
+        {
+            activityIndicatorFrame.IsVisible = b;
+            activityIndicator.IsVisible = b;
+            activityIndicator.IsRunning = b;
+            _isActivityRunning = b;
+        }
+
         public WalletDetails()
         {
             InitializeComponent();
@@ -32,8 +43,10 @@ namespace LykkeWallet.Pages
 
         public void SetAsset(string assetId)
         {
+            
             Task.Run(() =>
             {
+                Device.BeginInvokeOnMainThread(() => SetActivityRunning(true));
                 var asset = WalletApiSingleton.Instance.GetAsset(assetId).Result.Asset;
                 Device.BeginInvokeOnMainThread(() =>
                 {
@@ -42,27 +55,70 @@ namespace LykkeWallet.Pages
                     ViewModel.WithdrawButtonVisible = !asset.HideWithdraw;
                 });
 
-                var data = new ObservableCollection<HistoryCellData>
+                var data = WalletApiSingleton.Instance.GetHistory(assetId).Result;
+                _fullList = data;
+                var collection = new ObservableCollection<HistoryCellData>();
+
+                foreach (var item in data)
+                {
+                    try
                     {
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m},
-                        new HistoryCellData {Action = "Sell", Date = "Yesterday", Amount = 6564m}
-                    };
+                        var historyItem = new HistoryCellData();
+
+                        historyItem.Id = item.Id;
+
+                        if (item.CashInOut != null)
+                        {
+                            //historyItem.Action = item.CashInOut;
+                            historyItem.Amount = item.CashInOut.Amount;
+                            historyItem.Done = !string.IsNullOrEmpty(item.CashInOut.BlockChainHash);
+                            var action = item.CashInOut.Amount > 0m ? "Cash In" : "Cash Out";
+                            historyItem.Action = $"{item.CashInOut.Asset} {action}";
+                        }
+                        if (item.Trade != null)
+                        {
+                            //historyItem.Action = item.Trade.
+                            historyItem.Amount = item.Trade.Volume;
+                            historyItem.Done = !string.IsNullOrEmpty(item.Trade.BlockChainHash);
+                            var action = item.Trade.Volume > 0m ? "Buy" : "Sell";
+                            historyItem.Action = $"{item.Trade.Asset} {action}";
+                        }
+                        if (item.Transfer != null)
+                        {
+                            historyItem.Amount = item.Transfer.Volume;
+                            historyItem.Done = !string.IsNullOrEmpty(item.Transfer.BlockChainHash);
+                            var action = item.Transfer.Volume > 0m ? "Income" : "Outcome";
+                            historyItem.Action = $"{item.Transfer.Asset} {action}";
+                        }
+                        if (item.CashOutAttemp != null)
+                        {
+                            historyItem.Amount = item.CashOutAttemp.Volume;
+                        }
+                        if (item.CashOutCancelled != null)
+                        {
+                            historyItem.Amount = item.CashOutCancelled.Volume;
+                        }
+                        if (item.CashOutDone != null)
+                        {
+                            historyItem.Amount = item.CashOutDone.Volume;
+                        }
+
+                        historyItem.Date = item.DateTime.ToString();
+
+                        collection.Add(historyItem);
+                    }
+                    catch (Exception ex)
+                    {
+                        var a = 234;
+                    }
+                }
+
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    ViewModel.HistoryData = data;
+                    SetActivityRunning(false);
+                    ViewModel.HistoryData = collection;
+                    if (historyListView.IsRefreshing)
+                        historyListView.EndRefresh();
                 });
             });
         }
@@ -90,16 +146,29 @@ namespace LykkeWallet.Pages
             switch(ViewModel.AssetId)
             {
                 case "BTC":
-                    var depositPage = new DepositBtcPage();
+                    var depositPage = new DepositBtcPage(LocalKeyStorageAccess.LocalKeyAccessSingleton.Instance.GetPrivateKey());
                     await Navigation.PushAsync(depositPage);
                     break;
             }
             
         }
 
-        private void OnHistoryItemSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void OnHistoryItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            //throw new NotImplementedException();
+            var list = (ListView)sender;
+            list.ItemSelected -= OnHistoryItemSelected;
+
+            if (list.SelectedItem != null)
+            {
+                var selectedItem = (HistoryCellData)list.SelectedItem;
+                var item = _fullList.FirstOrDefault(x => x.Id == selectedItem.Id);
+                var orderPage = new OrderSummaryPage();
+                orderPage.SetItem(item);
+                await Navigation.PushAsync(orderPage);
+
+            }
+            list.SelectedItem = null;
+            list.ItemSelected += OnHistoryItemSelected;
         }
     }
 }

@@ -22,6 +22,9 @@
       <Button x:Name="depositButton" Text="Deposit" HorizontalOptions="FillAndExpand" Clicked="OnDepositClicked" IsVisible="{Binding DepositButtonVisible}"/>
       <Button x:Name="withdrawButton" Text="Withdraw" HorizontalOptions="FillAndExpand" Clicked="OnWithdrawClicked" IsVisible="{Binding WithdrawButtonVisible}" IsEnabled="{Binding Balance, Converter={StaticResource decimalToWithrdrawEnabledConverter}}"/>
     </StackLayout>
+    <Frame x:Name="activityIndicatorFrame" Padding="0,30,0,0" IsVisible="False">
+      <ActivityIndicator HorizontalOptions="CenterAndExpand" x:Name="activityIndicator" IsVisible="False"  IsRunning="False"/>
+    </Frame>
     <ListView 
               x:Name="historyListView"
               ItemsSource="{Binding HistoryData}"

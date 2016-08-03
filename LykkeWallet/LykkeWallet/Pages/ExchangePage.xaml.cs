@@ -243,6 +243,16 @@ namespace LykkeWallet.Pages
         private string _asset;
         private List<Button> _assetsButtons;
 
+        private bool _isActivityRunning;
+
+        private void SetActivityRunning(bool b)
+        {
+            activityIndicatorFrame.IsVisible = b;
+            activityIndicator.IsVisible = b;
+            activityIndicator.IsRunning = b;
+            _isActivityRunning = b;
+        }
+
         public ExchangePageViewModel ViewModel => exchangePageViewModel;
         public ExchangePage()
         {
@@ -291,6 +301,8 @@ namespace LykkeWallet.Pages
             var selectedButton = (Button)sender;
             var selectedAsset = selectedButton.Text;
 
+            ViewModel.ExchangeRates = null;
+            SetActivityRunning(true);
             foreach (var button in _assetsButtons)
             {
                 button.Opacity = 0.3;
@@ -308,13 +320,18 @@ namespace LykkeWallet.Pages
         }
 
 
-        public void RefreshData(string selectedAsset = null)
+        public void RefreshData(string selectedAsset = null, bool isRefreshing = false)
         {
             Debug.WriteLine("Fetching exchange data.......");
             Task.Run(() =>
             {
                 try
-                {
+                { 
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if (!isRefreshing)
+                            ;
+                    });
                     var list = new ObservableCollection<ExhcangeRateModel>();
                     var assetsPairs = WalletApiSingleton.Instance.GetAssetPairRates().Result;
                     foreach (var pair in assetsPairs.Rates)
@@ -336,6 +353,7 @@ namespace LykkeWallet.Pages
                     }
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        SetActivityRunning(false);
                         ViewModel.ExchangeRates = list;
                         if (exchageRatesListView.IsRefreshing)
                             exchageRatesListView.EndRefresh();
@@ -367,6 +385,7 @@ namespace LykkeWallet.Pages
 
         private void OnListRefreshed(object sender, EventArgs e)
         {
+            ViewModel.ExchangeRates = null;
             RefreshData();
         }
     }

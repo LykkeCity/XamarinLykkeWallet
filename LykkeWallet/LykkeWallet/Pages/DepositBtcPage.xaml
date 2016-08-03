@@ -4,21 +4,27 @@
              x:Class="LykkeWallet.Pages.DepositBtcPage"
              Title="Deposit BTC">
   <ContentPage.ToolbarItems>
-    <ToolbarItem x:Name="mailToolbarButton" Text="Mail" Icon="ic_email.png" Clicked="MailClicked"></ToolbarItem>
+    <ToolbarItem x:Name="mailToolbarButton"
+                 Text="Mail"
+                 Icon="ic_email.png"
+                 Clicked="MailClicked" />
   </ContentPage.ToolbarItems>
-  <StackLayout Padding="10,20,10,0">
-    <Frame Padding="0,0,0,10">
-      <Label Text="To deposit BTC into your trading wallet please use the following wallet address:" />
-    </Frame>
+  <StackLayout Padding="20,30,20,30">
+    <Label Text="To deposit BTC into your trading wallet please use the following wallet address:"
+           FontSize="Medium "/>
     <Frame VerticalOptions="CenterAndExpand">
-      <Image x:Name="qrImage" WidthRequest="300" />
+      <Image x:Name="qrImage"
+             WidthRequest="300" />
     </Frame>
     <StackLayout Orientation="Horizontal">
-      <Image />
-      <StackLayout>
-      
+      <StackLayout Orientation="Horizontal">
+        <Label Text=""
+               x:Name="btcAddressLabel"
+               FontSize="Medium"/>
+        <Button Text="Copy"
+                Clicked="CopyBtcAddress"
+                FontSize="Medium"/>
       </StackLayout>
-      <Image />
     </StackLayout>
   </StackLayout>
 </ContentPage>

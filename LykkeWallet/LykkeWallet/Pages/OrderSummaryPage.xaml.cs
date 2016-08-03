@@ -36,7 +36,7 @@ namespace LykkeWallet.Pages
             {
 
             }
-            else if (!string.IsNullOrEmpty(item.Transfer.BlockChainHash) || !string.IsNullOrEmpty(item.Trade.BlockChainHash) || !string.IsNullOrEmpty(item.CashInOut.BlockChainHash))
+            else if ((item.Transfer != null && !string.IsNullOrEmpty(item.Transfer.BlockChainHash)) || (item.Trade != null && !string.IsNullOrEmpty(item.Trade.BlockChainHash)) || (item.CashInOut != null && !string.IsNullOrEmpty(item.CashInOut.BlockChainHash)))
             {
                 SetBlockchainInfo(item.Id);
             }
