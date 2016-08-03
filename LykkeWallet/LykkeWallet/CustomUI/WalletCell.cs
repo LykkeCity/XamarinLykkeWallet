@@ -16,7 +16,7 @@ namespace LykkeWallet.CustomUI
         public static readonly BindableProperty CodeProperty = BindableProperty.Create("Code", typeof(string), typeof(WalletCell), "Code");
         public static readonly BindableProperty SymbolProperty = BindableProperty.Create("Symbol", typeof(string), typeof(WalletCell), "Symbol");
         public static readonly BindableProperty BalanceProperty = BindableProperty.Create("Balance", typeof(decimal), typeof(WalletCell), 0m);
-
+        
         public string Code
         {
             set { _labelLeft.Text = value; }

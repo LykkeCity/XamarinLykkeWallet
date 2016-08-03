@@ -61,10 +61,7 @@ namespace LykkeWallet.Pages
         {
             try
             {
-
-                var storage = new LocalKeyStorage();
-
-                var password = storage.Get(Constants.PASSWORD);
+                var password = LocalKeyAccessSingleton.Instance.GetPassword();
 
                 var key = new Key();
 
@@ -74,39 +71,17 @@ namespace LykkeWallet.Pages
 
                 var publicKey = secret.PubKey.ToString();
 
-                var paddedPassword = (password + "                ").Substring(0, 16);
-
-                var pk = Encoding.UTF8.GetBytes(privateKey);
-
-                var p = Encoding.UTF8.GetBytes(paddedPassword);
-
-                var cypher = AESHelper.EncryptByteArray(pk, p);
-
-                var encodedPrivateKey = BitConverter.ToString(cypher).Replace("-", "");
+                var encodedPrivateKey = AESHelper.Encrypt128(privateKey, password);
 
                 WalletApiSingleton.Instance.PostClientKeys(publicKey, encodedPrivateKey);
 
-                storage.Save(Constants.PASSWORD, null);
+                LocalKeyAccessSingleton.Instance.SetPassword(null);
             }
             catch (Exception ex)
             {
                 var a = 234;
 
             }
-        }
-
-        static byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
-
-        static string GetString(byte[] bytes)
-        {
-            char[] chars = new char[bytes.Length / sizeof(char)];
-            System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
-            return new string(chars);
         }
     }
 }

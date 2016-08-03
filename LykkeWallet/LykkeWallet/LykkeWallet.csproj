@@ -42,6 +42,7 @@
     <Compile Include="App.cs" />
     <Compile Include="Converters\AmountInputToDecimalConverter.cs" />
     <Compile Include="Converters\BlockchainDateToStringConverter.cs" />
+    <Compile Include="Converters\BtcAddressToButtonEnabledConverter.cs" />
     <Compile Include="Converters\DecimalPercentagetToStringConverter.cs" />
     <Compile Include="Converters\DecimalRateToStringConverter.cs" />
     <Compile Include="Converters\DecimalToButtonEnabledConverter.cs" />
@@ -59,6 +60,8 @@
     <Compile Include="CustomUI\PhoneCodeCell.cs" />
     <Compile Include="CustomUI\SmartListView.cs" />
     <Compile Include="CustomUI\WalletCell.cs" />
+    <Compile Include="IBarcodeService.cs" />
+    <Compile Include="IClipboardService.cs" />
     <Compile Include="Json\JsonCustomDateTimeConverter.cs" />
     <Compile Include="LocalKeyStorageAccess\Constants.cs" />
     <Compile Include="LocalKeyStorageAccess\ILocalKeyAccess.cs" />
@@ -91,6 +94,9 @@
     </Compile>
     <Compile Include="Pages\MyLykkePage.xaml.cs">
       <DependentUpon>MyLykkePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\OrderSummaryPage.xaml.cs">
+      <DependentUpon>OrderSummaryPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\Page1.xaml.cs">
       <DependentUpon>Page1.xaml</DependentUpon>
@@ -166,6 +172,7 @@
     <Compile Include="ViewModels\ExchangeDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\ExchangePageViewModel.cs" />
     <Compile Include="ViewModels\HistoryPageViewModel.cs" />
+    <Compile Include="ViewModels\OrderSummaryPageViewModel.cs" />
     <Compile Include="ViewModels\PinEntryRegistrationPageViewModel.cs" />
     <Compile Include="ViewModels\PhoneConfirmationPageViewModel.cs" />
     <Compile Include="ViewModels\EmailConfirmPageViewModel.cs" />
@@ -177,6 +184,7 @@
     <Compile Include="ViewModels\SelfiePickerPageViewModel.cs" />
     <Compile Include="ViewModels\WalletDetailsPageViewModel.cs" />
     <Compile Include="ViewModels\WalletPageViewModel.cs" />
+    <Compile Include="ViewModels\WithdrawBtcAddressPageViewModel.cs" />
     <Compile Include="ViewModels\WithdrawFundsAmountPageViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -430,6 +438,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\WithdrawFundsAmountPage.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\ic_email.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Pages\OrderSummaryPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

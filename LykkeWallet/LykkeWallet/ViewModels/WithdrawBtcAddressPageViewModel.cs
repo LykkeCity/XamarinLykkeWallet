@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LykkeWallet.ViewModels
 {
-    class WithdrawFundsAmountPageViewModel : INotifyPropertyChanged
+    class WithdrawBtcAddressPageViewModel : INotifyPropertyChanged
     {
         private string _assetId;
         public string AssetId
@@ -17,7 +17,7 @@ namespace LykkeWallet.ViewModels
             get { return _assetId; }
             set
             {
-                if (value != _assetId)
+                if(value != _assetId)
                 {
                     _assetId = value;
                     OnPropertyChanged();
@@ -25,47 +25,54 @@ namespace LykkeWallet.ViewModels
             }
         }
 
-        private string _symbol;
-        public string Symbol
+        private decimal _amount;
+        public decimal Amount
         {
-            get { return _symbol; }
+            get { return _amount; }
             set
             {
-                if(value != _symbol)
+                if(value != _amount)
                 {
-                    _symbol = value;
+                    _amount = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private decimal _availableAmount;
-        public decimal AvailableAmount
+        private string _address;
+        public string Address
         {
-            get { return _availableAmount; }
+            get { return _address; }
             set
             {
-                if(_availableAmount != value)
+                if(value != _address)
                 {
-                    _availableAmount = value;
+                    _address = value;
+                    OnPropertyChanged();
+                    Validate();
+                }
+            }
+        }
+
+        private bool _addressIsValid;
+        public bool AddressIsValid
+        {
+            get { return _addressIsValid; }
+            set
+            {
+                if(value != _addressIsValid)
+                {
+                    _addressIsValid = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private decimal _enteredAmount;
-        public decimal EnteredAmount
+        private void Validate()
         {
-            get { return _enteredAmount; }
-            set
-            {
-                if (_enteredAmount != value)
-                {
-                    _enteredAmount = value;
-                    OnPropertyChanged();
-                }
-            }
+            AddressIsValid = !string.IsNullOrEmpty(Address.Trim());
         }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

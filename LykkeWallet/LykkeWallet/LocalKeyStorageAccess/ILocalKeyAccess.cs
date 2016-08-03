@@ -12,6 +12,8 @@ namespace LykkeWallet.LocalKeyStorageAccess
         string GetToken();
         void AddOrUpdateEmailKeyPair(string email, string pk);
         void SavePrivateKey(string pk);
-        void GetPrivateKey();
+        string GetPrivateKey();
+        void SetPassword(string pwd);
+        string GetPassword();
     }
 }

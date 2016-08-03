@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace LykkeWallet.Pages
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class BlockchainExplorerPage : ContentPage
     {
         private BlockchainExplorerPageViewModel ViewModel => blockchainExplorerPageViewModel;

@@ -18,12 +18,20 @@ namespace LykkeWallet.CustomUI
 
         public static readonly BindableProperty AmountProperty = BindableProperty.Create("Amount", typeof(decimal), typeof(HistoryCell), 0m);
 
+        public static readonly BindableProperty DoneProperty = BindableProperty.Create("Done", typeof(bool), typeof(HistoryCell), false);
+
         public static readonly BindableProperty IdProperty = BindableProperty.Create("Id", typeof(string), typeof(HistoryCell), "Id");
 
         public string Id
         {
             get { return (string)GetValue(IdProperty); }
             set { SetValue(IdProperty, value); }
+        }
+
+        public bool Done
+        {
+            get { return (bool)GetValue(DoneProperty); }
+            set { SetValue(DoneProperty, value); }
         }
 
         public string Action

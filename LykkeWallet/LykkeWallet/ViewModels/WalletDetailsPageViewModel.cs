@@ -13,6 +13,20 @@ namespace LykkeWallet.ViewModels
 {
     class WalletDetailsPageViewModel : INotifyPropertyChanged
     {
+        private string _assetId;
+        public string AssetId
+        {
+            get { return _assetId; }
+            set
+            {
+                if (value != _assetId)
+                {
+                    _assetId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private decimal _balance;
         public decimal Balance
         {

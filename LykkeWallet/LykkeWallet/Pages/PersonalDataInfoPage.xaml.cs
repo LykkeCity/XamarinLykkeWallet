@@ -15,30 +15,31 @@ namespace LykkeWallet.Pages
             InitializeComponent();
         }
 
-        protected override async void OnAppearing()
+        public void SetData()
         {
-            var personalData = await WalletApiSingleton.Instance.GetPersonalDataAsync();
+            Task.Run(() =>
+            {
+                var list = new List<TextCell>();
 
-            var tableData = new TableView();
+                var personalData = WalletApiSingleton.Instance.GetPersonalDataAsync().Result;
 
-            var emailCell = new TextCell();
-            emailCell.Text = personalData.Email;
+                var emailCell = new TextCell();
+                emailCell.Text = personalData.Email;
+                list.Add(emailCell);
 
-            var phoneCell = new TextCell();
-            phoneCell.Text = personalData.Phone;
+                var phoneCell = new TextCell();
+                phoneCell.Text = personalData.Phone;
+                list.Add(phoneCell);
 
-            var countryCell = new TextCell();
-            countryCell.Text = personalData.Country;
+                var countryCell = new TextCell();
+                countryCell.Text = personalData.Country;
+                list.Add(countryCell);
 
-            tableData.Root.Add(new TableSection());
-            tableData.Root.LastOrDefault().Add(emailCell);
-            tableData.Root.LastOrDefault().Add(phoneCell);
-            tableData.Root.LastOrDefault().Add(countryCell);
-
-
-            Content = tableData;
-
-            base.OnAppearing();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    personalDataListView.ItemsSource = list;
+                });
+            });
             
         }
     }

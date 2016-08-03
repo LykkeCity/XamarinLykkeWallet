@@ -26,7 +26,7 @@ namespace LykkeWallet.Pages
             var general = new TableSection("General");
 
             _personalDataCell = new TextCell { Text = "Personal data" };
-            _personalDataCell.Tapped += PersonalDataCellTapped;
+            //_personalDataCell.Tapped += PersonalDataCellTapped;
 
             _signOrder = new SwitchCell
             {
@@ -39,7 +39,7 @@ namespace LykkeWallet.Pages
                 Text = "Base asset",
                 Detail = ""
             };
-            _baseAsset.Tapped += BaseAssetCellTapped;
+            //_baseAsset.Tapped += BaseAssetCellTapped;
 
             _refundAddress = new TextCell
             {
@@ -51,7 +51,7 @@ namespace LykkeWallet.Pages
             {
                 Text = "Log out"
             };
-            _logOutCell.Tapped += LogOut;
+            //_logOutCell.Tapped += LogOut;
 
             general.Add(_personalDataCell);
             general.Add(_signOrder);
@@ -60,6 +60,22 @@ namespace LykkeWallet.Pages
             general.Add(_logOutCell);
 
             settingsTable.Root.Add(general);
+            
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _personalDataCell.Tapped -= PersonalDataCellTapped;
+            _baseAsset.Tapped -= BaseAssetCellTapped;
+            _logOutCell.Tapped -= LogOut;
+        }
+        protected override void OnAppearing()
+        {
+            base.OnDisappearing();
+            _personalDataCell.Tapped += PersonalDataCellTapped;
+            _baseAsset.Tapped += BaseAssetCellTapped;
+            _logOutCell.Tapped += LogOut;
         }
 
         private void BaseAssetCellTapped(object sender, EventArgs e)
@@ -69,7 +85,9 @@ namespace LykkeWallet.Pages
 
         private void PersonalDataCellTapped(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new PersonalDataInfoPage());
+            var personalDataInfoPage = new PersonalDataInfoPage();
+            personalDataInfoPage.SetData();
+            Navigation.PushAsync(personalDataInfoPage);
         }
 
         public void  RefreshData()
@@ -86,12 +104,12 @@ namespace LykkeWallet.Pages
             _baseAsset.Detail = newAsset;
         }
 
-        private void LogOut(object sender, EventArgs e)
+        private async void LogOut(object sender, EventArgs e)
         {
             _logOutCell.Tapped -= LogOut;
             LocalKeyAccessSingleton.Instance.SaveToken(null);
             LocalKeyAccessSingleton.Instance.SavePrivateKey(null);
-            Navigation.PopToRootAsync();
+            await Navigation.PopToRootAsync();
             _logOutCell.Tapped += LogOut;
         }
     }

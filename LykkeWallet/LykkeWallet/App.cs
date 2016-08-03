@@ -15,7 +15,7 @@ namespace LykkeWallet
     {
         public App()
         {
-            //weird();
+            weird();
             //var localStorage = new LocalKeyStorage();
             //localStorage.Save(WalletApi.TokenName, null);
             MainPage = new NavigationPage(new LoginPage());
@@ -23,6 +23,7 @@ namespace LykkeWallet
 
         private void weird()
         {
+            /*
             var key = new Key();
 
             var secret = new BitcoinSecret(key, Network.TestNet);
@@ -36,20 +37,28 @@ namespace LykkeWallet
 
             var pk = Encoding.UTF8.GetBytes(publicKey);
 
-            var cypher = AESHelper.EncryptByteArray(Encoding.UTF8.GetBytes(privateKey), Encoding.UTF8.GetBytes(b));
-
-
+            var bytepk = Encoding.UTF8.GetBytes(privateKey);
+            var cypher = AESHelper.EncryptByteArray(bytepk, Encoding.UTF8.GetBytes(b));
+            
             var c = BitConverter.ToString(cypher).Replace("-", "");
 
-            var d = 234;
+            var c_reversed = StringToByteArray(c);
+            var d = AESHelper.DecryptByteArray(c_reversed, Encoding.UTF8.GetBytes(b));
+            var cypher_reversed = System.Text.Encoding.UTF8.GetString(d, 0, d.Length);
+
+            var v1 = AESHelper.Encrypt128("avoe", "123");
+            var v2 = AESHelper.Decrypt128(v1, "123");
+
+
+            var dd = 234;
+            */
         }
-        public static byte[] StringToByteArray(String hex)
+        public static byte[] StringToByteArray(string hex)
         {
-            int NumberChars = hex.Length;
-            byte[] bytes = new byte[NumberChars / 2];
-            for (int i = 0; i < NumberChars; i += 2)
-                bytes[i / 2] = Convert.ToByte(hex.Substring(i, 2), 16);
-            return bytes;
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .ToArray();
         }
 
         static byte[] GetBytes(string str)

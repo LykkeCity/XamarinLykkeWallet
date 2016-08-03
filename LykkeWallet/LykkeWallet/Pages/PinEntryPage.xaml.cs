@@ -14,7 +14,7 @@ namespace LykkeWallet.Pages
         public PinEntryPage(MainTabbedPage mainTabbedPage)
         {
             _mainTabbedPage = mainTabbedPage;
-            _mainTabbedPage.InitializeChildren();
+            //_mainTabbedPage.InitializeChildren();
 
             InitializeComponent();
         }
@@ -39,7 +39,7 @@ namespace LykkeWallet.Pages
             var resp = await WalletApiSingleton.Instance.CheckPinCodeAsync(pinEntry.Text);
             if (resp.Passed)
             {
-                //_mainTabbedPage.InitializeChildren();
+                _mainTabbedPage.InitializeChildren();
 
                 await Navigation.PopModalAsync();
             }

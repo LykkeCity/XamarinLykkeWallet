@@ -1,19 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
              x:Class="LykkeWallet.Pages.WithdrawBtcAddressPage"
              Title="Withdraw funds">
-  <StackLayout Padding="10,0,10,0">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <converters:BtcAddressToButtonEnabledConverter x:Key="btcAddressToButtonEnabledConverter" x:Name="btcAddressToButtonEnabledConverter"/>
+      <viewModels:WithdrawBtcAddressPageViewModel x:Key="withdrawBtcAddressPageViewModel" x:Name="withdrawBtcAddressPageViewModel"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <StackLayout Padding="10,0,10,0"
+               BindingContext="{StaticResource withdrawBtcAddressPageViewModel}">
     <Frame Padding="0,20,0,30">
       <Label Text="Your wallet will not be charged until you authorize this transaction" FontSize="Small" />
     </Frame>
     <Label Text="Bitcoin wallet" FontSize="Small" />
     <StackLayout Orientation="Horizontal">
-      <Entry x:Name="addressEntry" HorizontalOptions="FillAndExpand" />
+      <Entry x:Name="addressEntry" HorizontalOptions="FillAndExpand" Text="{Binding Address}"/>
       <Button Text="QR" HorizontalOptions="End" Clicked="OnQRButtonClicked" />
     </StackLayout>
     <Frame Padding="0,20,0,0">
-      <Button Text="Proceed" FontSize="Medium" Clicked="OnProceedButtonClicked" IsEnabled="True" HorizontalOptions="EndAndExpand" VerticalOptions="Start"/>
+      <Button Text="Proceed" FontSize="Medium" Clicked="OnProceedButtonClicked" IsEnabled="{Binding AddressIsValid}" HorizontalOptions="EndAndExpand" VerticalOptions="Start"/>
     </Frame>
   </StackLayout>
 </ContentPage>

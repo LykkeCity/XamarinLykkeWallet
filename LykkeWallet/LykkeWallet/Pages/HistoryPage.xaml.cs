@@ -17,32 +17,25 @@ namespace LykkeWallet.Pages
         public string Action { set; get; }
         public string Date { set; get; }
         public decimal Amount { set; get; }
+        public bool Done { set; get; }
     }
 
     public partial class HistoryPage : ContentPage
     {
         private HistoryPageViewModel ViewModel => historyPageViewModel;
-
-        private object _storage;
+        private List<HistoryItemModel> _fullList;
+        private BlockchainExplorerPage _blockchainExplorerPage = new BlockchainExplorerPage();
 
         public HistoryPage()
         {
             InitializeComponent();
         }
 
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            // _storage = historyListView.SelectedItem;
-            //historyListView.SelectedItem = null;
-        }
-
         protected override void OnAppearing()
         {
-            //historyListView.SelectedItem = _storage;
             base.OnAppearing();
+            //_blockchainExplorerPage = new BlockchainExplorerPage();
         }
-
 
         public void RefreshData()
         {
@@ -50,6 +43,7 @@ namespace LykkeWallet.Pages
                 () =>
                 {
                     var data = WalletApiSingleton.Instance.GetHistory().Result;
+                    _fullList = data;
                     var collection = new ObservableCollection<HistoryCellData>();
 
                     foreach (var item in data)
@@ -65,6 +59,7 @@ namespace LykkeWallet.Pages
                             {
                                 //historyItem.Action = item.CashInOut;
                                 historyItem.Amount = item.CashInOut.Amount;
+                                historyItem.Done = !string.IsNullOrEmpty(item.CashInOut.BlockChainHash);
                                 var action = item.CashInOut.Amount > 0m ? "Cash In" : "Cash Out";
                                 historyItem.Action = $"{item.CashInOut.Asset} {action}";
                             }
@@ -72,12 +67,14 @@ namespace LykkeWallet.Pages
                             {
                                 //historyItem.Action = item.Trade.
                                 historyItem.Amount = item.Trade.Volume;
+                                historyItem.Done = !string.IsNullOrEmpty(item.Trade.BlockChainHash);
                                 var action = item.Trade.Volume > 0m ? "Buy" : "Sell";
                                 historyItem.Action = $"{item.Trade.Asset} {action}";
                             }
                             if (item.Transfer != null)
                             {
                                 historyItem.Amount = item.Transfer.Volume;
+                                historyItem.Done = !string.IsNullOrEmpty(item.Transfer.BlockChainHash);
                                 var action = item.Transfer.Volume > 0m ? "Income" : "Outcome";
                                 historyItem.Action = $"{item.Transfer.Asset} {action}";
                             }
@@ -121,14 +118,19 @@ namespace LykkeWallet.Pages
         private async void OnHistoryItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var list = (ListView)sender;
+            list.ItemSelected -= OnHistoryItemSelected;
+
             if (list.SelectedItem != null)
             {
                 var selectedItem = (HistoryCellData)list.SelectedItem;
-                list.SelectedItem = null;
-                var blockchainExplorerPage = new BlockchainExplorerPage();
-                blockchainExplorerPage.SetBlockchainInfo(selectedItem.Id);
-                await Navigation.PushAsync(blockchainExplorerPage);
+                var item = _fullList.FirstOrDefault(x => x.Id == selectedItem.Id);
+                var orderPage = new OrderSummaryPage();
+                orderPage.SetItem(item);
+                await Navigation.PushAsync(orderPage);
+
             }
+            list.SelectedItem = null;
+            list.ItemSelected += OnHistoryItemSelected;
         }
     }
 }

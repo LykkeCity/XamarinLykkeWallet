@@ -1,4 +1,6 @@
-﻿using System;
+﻿using LykkeWallet.ApiAccess;
+using LykkeWallet.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +12,17 @@ namespace LykkeWallet.Pages
 {
     public partial class WithdrawBtcAddressPage : ContentPage
     {
+        private WithdrawBtcAddressPageViewModel ViewModel => withdrawBtcAddressPageViewModel;
+
         public WithdrawBtcAddressPage()
         {
             InitializeComponent();
+        }
+
+        public void SetData(string assetId, decimal amount)
+        {
+            ViewModel.AssetId = assetId;
+            ViewModel.Amount = amount;
         }
 
         protected override void OnAppearing()
@@ -49,9 +59,10 @@ namespace LykkeWallet.Pages
             return true;
         }
 
-        private void OnProceedButtonClicked(object sender, EventArgs e)
+        private async void OnProceedButtonClicked(object sender, EventArgs e)
         {
-
+            var pk = LocalKeyStorageAccess.LocalKeyAccessSingleton.Instance.GetPrivateKey();
+            await WalletApiSingleton.Instance.PostCashOut(ViewModel.Address, ViewModel.Amount, ViewModel.AssetId, pk);
         }
 
 

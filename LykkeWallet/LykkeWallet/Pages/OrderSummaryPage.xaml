@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.OrderSummaryPage">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <viewModels:OrderSummaryPageViewModel x:Key="orderSummaryPageViewModel" x:Name="orderSummaryPageViewModel"/>
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <ListView BindingContext="{StaticResource orderSummaryPageViewModel}" ItemsSource="{Binding ListViewData}" HasUnevenRows="True">
+    <ListView.ItemTemplate>
+      <DataTemplate>
+        <TextCell Text="{Binding Text}" Detail="{Binding Detail}" >
+        </TextCell>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+</ContentPage>

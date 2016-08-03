@@ -131,11 +131,13 @@ namespace LykkeWallet.ApiAccess
 
 
 
-        private static async Task<string> DoPostHttpRequestAsync(string path, object data)
+        private static async Task<string> DoPostHttpRequestAsync(string path, object data, object urlData)
         {
             try
             {
-                var webRequest = (HttpWebRequest) WebRequest.Create(Url + path);
+                var q = urlData == null ? "" : "?" + urlData.FormatUrlString();
+
+                var webRequest = (HttpWebRequest) WebRequest.Create(Url + path + q);
                 webRequest.Method = "POST";
                 webRequest.ContentType = "application/json";
                 //webRequest. = $"DeviceType={Constants.UserAgent.DEVICE_TYPE};AppVersion={Constants.UserAgent.APP_VERSION};ClientFeatures={Constants.UserAgent.CLIENT_FEATURES}";
@@ -188,11 +190,11 @@ namespace LykkeWallet.ApiAccess
 
         }
 
-        private async Task DoPostRequestAsync(string path, object data = null)
+        private async Task DoPostRequestAsync(string path, object data = null, object urlData = null)
         {
             try
             {
-                await DoPostHttpRequestAsync(path, data);
+                await DoPostHttpRequestAsync(path, data, urlData);
             }
             catch (WebException ex)
             {
@@ -202,11 +204,11 @@ namespace LykkeWallet.ApiAccess
             }
         }
 
-        private async Task<T> DoPostRequestAsync<T>(string path, object data = null)
+        private async Task<T> DoPostRequestAsync<T>(string path, object data = null, object urlData = null)
         {
             try
             {
-                var response = await DoPostHttpRequestAsync(path, data);
+                var response = await DoPostHttpRequestAsync(path, data, urlData);
                 var result = Newtonsoft.Json.JsonConvert.DeserializeObject<ApiResponseModel<T>>(response);
                 return result.Result;
             }

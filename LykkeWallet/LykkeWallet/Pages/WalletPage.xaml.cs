@@ -80,7 +80,7 @@ namespace LykkeWallet.Pages
                 var selectedWallet = (WalletCell)list.SelectedItem;
                 list.SelectedItem = null;
                 var walletDetailsPage = new WalletDetails();
-                walletDetailsPage.SetExternalData(selectedWallet.Balance, selectedWallet.Symbol);
+                walletDetailsPage.SetExternalData(selectedWallet.Code, selectedWallet.Balance, selectedWallet.Symbol);
                 walletDetailsPage.SetAsset(selectedWallet.Code);
                 await Navigation.PushAsync(walletDetailsPage);
             }

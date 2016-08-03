@@ -20,9 +20,14 @@ namespace LykkeWallet.LocalKeyStorageAccess
             _localKeyStorage.Save($"{email}{Constants.PK_MAIL_SUFFIX}", pk);
         }
 
-        public void GetPrivateKey()
+        public string GetPassword()
         {
-            _localKeyStorage.Get(Constants.ENCODED_PK);
+            return _localKeyStorage.Get(Constants.PASSWORD);
+        }
+
+        public string GetPrivateKey()
+        {
+            return _localKeyStorage.Get(Constants.ENCODED_PK);
         }
 
         public string GetToken()
@@ -40,5 +45,9 @@ namespace LykkeWallet.LocalKeyStorageAccess
             _localKeyStorage.Save(Constants.SECURITY_TOKEN, token);
         }
 
+        public void SetPassword(string pwd)
+        {
+            _localKeyStorage.Save(Constants.PASSWORD, pwd);
+        }
     }
 }

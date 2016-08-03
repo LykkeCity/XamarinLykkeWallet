@@ -23,8 +23,9 @@ namespace LykkeWallet.Pages
             ViewModel.DepositButtonVisible = false;
         }
 
-        public void SetExternalData(decimal amount, string symbol)
+        public void SetExternalData(string id, decimal amount, string symbol)
         {
+            ViewModel.AssetId = id;
             ViewModel.Balance = amount;
             ViewModel.Symbol = symbol;
         }
@@ -69,14 +70,31 @@ namespace LykkeWallet.Pages
 
         private async void OnWithdrawClicked(object sender, EventArgs e)
         {
-            var withdrawAFundsAmountPage = new WithdrawFundsAmountPage();
-            withdrawAFundsAmountPage.SetData(ViewModel.Symbol, ViewModel.Balance);
-            await Navigation.PushAsync(withdrawAFundsAmountPage);
+            Page page = new Page();
+
+            switch (ViewModel.AssetId)
+            {
+                case "BTC":
+                    var withdrawAFundsAmountPage = new WithdrawFundsAmountPage();
+                    withdrawAFundsAmountPage.SetData(ViewModel.AssetId, ViewModel.Symbol, ViewModel.Balance);
+                    page = withdrawAFundsAmountPage;
+                    break;
+            }
+
+            await Navigation.PushAsync(page);
         }
 
-        private void OnDepositClicked(object sender, EventArgs e)
+        private async void OnDepositClicked(object sender, EventArgs e)
         {
-           
+            //Page depositPage;
+            switch(ViewModel.AssetId)
+            {
+                case "BTC":
+                    var depositPage = new DepositBtcPage();
+                    await Navigation.PushAsync(depositPage);
+                    break;
+            }
+            
         }
 
         private void OnHistoryItemSelected(object sender, SelectedItemChangedEventArgs e)

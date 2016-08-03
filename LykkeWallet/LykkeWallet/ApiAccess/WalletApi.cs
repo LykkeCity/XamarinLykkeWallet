@@ -205,5 +205,20 @@ namespace LykkeWallet.ApiAccess
         {
             return DoGetRequestAsync<List<HistoryItemModel>>("History");
         }
+
+        public Task<SendBlockchainEmailRespModel> PostSendBlockchainEmail(string assetId)
+        {
+            return DoPostRequestAsync<SendBlockchainEmailRespModel>("SendBlockchainEmail", null, new { assetId });
+        }
+
+        public Task<CashOutRespModel> PostCashOut(string multiSig, decimal amount, string assetId, string privateKey)
+        {
+            return DoPostRequestAsync<CashOutRespModel>("CashOut", new { MultiSig = multiSig, Amount = amount, AssetId = assetId, PrivateKey = privateKey });
+        }
+
+        public Task<EncodedPrivateKeyRespModel> PostEncodedPrivateKey(string password)
+        {
+            return DoPostRequestAsync<EncodedPrivateKeyRespModel>("EncodedPrivateKey", new { password });
+        }
     }
 }

@@ -343,4 +343,19 @@ namespace LykkeWallet.ApiAccess
         public string Url { set; get; }
     }
 
+    public class SendBlockchainEmailRespModel
+    {
+        public string Email { set; get; }
+    }
+
+    public class CashOutRespModel
+    {
+
+    }
+
+    public class EncodedPrivateKeyRespModel
+    {
+        public string EncodedPrivateKey { set; get; }
+    }
+
 }
