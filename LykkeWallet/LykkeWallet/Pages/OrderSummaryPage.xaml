@@ -9,7 +9,7 @@
       <viewModels:OrderSummaryPageViewModel x:Key="orderSummaryPageViewModel" x:Name="orderSummaryPageViewModel"/>
     </ResourceDictionary>
   </ContentPage.Resources>
-  <ListView BindingContext="{StaticResource orderSummaryPageViewModel}" ItemsSource="{Binding ListViewData}" HasUnevenRows="True">
+  <ListView BindingContext="{StaticResource orderSummaryPageViewModel}" ItemsSource="{Binding ListViewData}" ItemSelected="OnItemClicked" HasUnevenRows="True">
     <ListView.ItemTemplate>
       <DataTemplate>
         <TextCell Text="{Binding Text}" Detail="{Binding Detail}" >

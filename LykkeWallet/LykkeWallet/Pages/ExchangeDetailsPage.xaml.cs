@@ -36,6 +36,20 @@ namespace LykkeWallet.Pages
 
         }
 
+        public void SetExternalData(string baseAsset)
+        {
+            ViewModel.BaseAsset = baseAsset;
+        }
+
+        public void SetSymbols(string ba, string sa)
+        {
+            Task.Run(() =>
+            {
+                ViewModel.BaseAssetSymbol = WalletApiSingleton.Instance.GetAsset(ba).Result.Asset.Symbol;
+                ViewModel.SecondaryAssetSymbol = WalletApiSingleton.Instance.GetAsset(sa).Result.Asset.Symbol;
+            });
+        }
+
         private void NewPeriodSelected(object sender, EventArgs e)
         {
             foreach (var button in _periodButtons)
@@ -136,10 +150,10 @@ namespace LykkeWallet.Pages
                         ViewModel.AssetFrom = assetPair.Inverted ? id.Substring(3) : id.Substring(0, 3);
                         ViewModel.AssetTo = assetPair.Inverted ? id.Substring(0, 3) : id.Substring(3);
                         ViewModel.Ask = askParsed
-                            ? Math.Round(ask, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy)
+                            ? Math.Round(assetPair.Inverted ? 1/bid : ask, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy)
                             : 0m;
                         ViewModel.Bid = bidParsed
-                            ? Math.Round(bid, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy)
+                            ? Math.Round(assetPair.Inverted ? 1 / ask : bid, assetPair.Inverted ? assetPair2.InvertedAccuracy : assetPair2.Accuracy)
                             : 0m;
                         var b = ((assetPair.Inverted ? 1.0 / assetPair3.Rate.ChngGrph.Last() : assetPair3.Rate.ChngGrph.Last()) - (assetPair.Inverted ? 1.0 / assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2] : assetPair3.Rate.ChngGrph[assetPair3.Rate.ChngGrph.Count - 2])).ToString();
                         ViewModel.Change =
@@ -171,6 +185,18 @@ namespace LykkeWallet.Pages
             }
 
             invertToolbarItem.Clicked += InvertPair;
+        }
+
+
+        private async void OnBuyClicked(object sender, EventArgs e)
+        {
+            var p = new TradePage(ViewModel.BaseAsset, ViewModel.PairId, TradeAction.Buy, ViewModel.BaseAssetSymbol, ViewModel.SecondaryAssetSymbol, ViewModel.Ask, ViewModel.Bid);
+            await Navigation.PushAsync(p);
+        }
+
+
+        private void OnSellClicked(object sender, EventArgs e)
+        {
         }
     }
 }

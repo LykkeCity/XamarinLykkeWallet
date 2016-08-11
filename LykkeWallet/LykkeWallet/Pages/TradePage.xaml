@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:LykkeWallet.Converters;assembly=LykkeWallet"
+             xmlns:viewModels="clr-namespace:LykkeWallet.ViewModels;assembly=LykkeWallet"
+             xmlns:customUi="clr-namespace:LykkeWallet.CustomUI;assembly=LykkeWallet"
+             x:Class="LykkeWallet.Pages.TradePage"
+             Title="Trade">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <viewModels:TradePageViewModel x:Key="tradePageViewModel" x:Name="tradePageViewModel"/>
+      <converters:AmountInputToDecimalConverter x:Name="amountInputToDecimalConverter" x:Key="amountInputToDecimalConverter" />
+      <converters:DecimalToButtonEnabledConverter x:Name="decimalToButtonEnabledConverter" x:Key="decimalToButtonEnabledConverter" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
+  <StackLayout BindingContext="{StaticResource tradePageViewModel}" Padding="15,20,15,0">
+
+    <customUi:BindablePicker x:Name="actionPicker"
+                                 Title=""
+                                 ItemsSource="{Binding ActionsList}"/>
+
+    <StackLayout Orientation="Horizontal" Padding="0,20,0,0">
+      <StackLayout HorizontalOptions="FillAndExpand" Padding="0,0,10,0">
+        <Label Text="Buy" FontSize="Small"/>
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+          <Label Text="{Binding BuySymbol}" FontSize="Large" VerticalOptions="Center"/>
+          <Entry Text="{Binding BuyValue, Converter={StaticResource amountInputToDecimalConverter}}" HorizontalOptions="FillAndExpand" FontSize="Large" VerticalOptions="Center" Keyboard="Numeric"/>
+        </StackLayout>
+      </StackLayout>
+      <StackLayout HorizontalOptions="End">
+        <Label Text="Price" FontSize="Small" VerticalOptions="Center"/>
+        <Label Text="{Binding Price}" FontSize="Large" VerticalOptions="Center"/>
+      </StackLayout>
+    </StackLayout>
+
+    <StackLayout HorizontalOptions="FillAndExpand" Padding="0,0,10,0">
+      <Label Text="Sell" FontSize="Small"/>
+      <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+        <Label Text="{Binding SellSymbol}" FontSize="Large" VerticalOptions="Center"/>
+        <Entry Text="{Binding SellValue, Converter={StaticResource amountInputToDecimalConverter}}" HorizontalOptions="FillAndExpand" FontSize="Large" VerticalOptions="Center" Keyboard="Numeric"/>
+      </StackLayout>
+    </StackLayout>
+
+    <Frame Padding="0,20,0,0">
+      <Button Text="Checkout" x:Name="checkoutButton" FontSize="Medium" Clicked="OnCheckoutButtonClicked" IsEnabled="{Binding SellValue, Converter={StaticResource decimalToButtonEnabledConverter}}" HorizontalOptions="EndAndExpand" VerticalOptions="Start"/>
+    </Frame>
+  </StackLayout>
+</ContentPage>

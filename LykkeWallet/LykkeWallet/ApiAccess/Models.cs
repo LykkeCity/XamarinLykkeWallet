@@ -358,4 +358,25 @@ namespace LykkeWallet.ApiAccess
         public string EncodedPrivateKey { set; get; }
     }
 
+    public class PurchaseAssetRespModel
+    {
+        public PurchaseAssetOrder Order { set; get; }
+        public List<TransactionTradeModel> Trades { set; get; }
+    }
+
+    public class PurchaseAssetOrder
+    {
+        public string Id { set; get; }
+        [JsonProperty(ItemConverterType = typeof(JsonCustomDateTimeConverter))]
+        public DateTime DateTime { set; get; }
+        public string OrderType { set; get; }
+        public decimal Volume { set; get; }
+        public decimal Price { set; get; }
+        public string BaseAsset { set; get; }
+        public string AssetPair { set; get; }
+        public decimal TotalCost { set; get; }
+        public decimal Comission { set; get; }
+        public int Accuracy { set; get; }
+    }
+
 }

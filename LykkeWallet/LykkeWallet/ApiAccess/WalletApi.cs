@@ -224,5 +224,10 @@ namespace LykkeWallet.ApiAccess
         {
             return DoPostRequestAsync<EncodedPrivateKeyRespModel>("EncodedPrivateKey", new { password });
         }
+
+        public Task<PurchaseAssetRespModel> PostPurchaseAsset(string baseAsset, string assetPair, decimal volume, decimal rate, string privateKey)
+        {
+            return DoPostRequestAsync<PurchaseAssetRespModel>("PurchaseAsset", new { baseAsset, assetPair, volume, rate, privateKey });
+        }
     }
 }

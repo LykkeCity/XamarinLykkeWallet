@@ -57,8 +57,8 @@
     <StackLayout Orientation="Horizontal"
                  HorizontalOptions="FillAndExpand"
                  Padding="0, 15, 0, 0">
-      <Button Text="{Binding Ask, StringFormat='Buy at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
-      <Button Text="{Binding Bid, StringFormat='Sell at {0}'}" HorizontalOptions = "FillAndExpand"></Button>
+      <Button Text="{Binding Ask, StringFormat='Buy at {0}'}" HorizontalOptions = "FillAndExpand" Clicked="OnBuyClicked"></Button>
+      <Button Text="{Binding Bid, StringFormat='Sell at {0}'}" HorizontalOptions = "FillAndExpand" Clicked="OnSellClicked"></Button>
     </StackLayout>
     <ListView x:Name="assetDataList" ItemsSource="{Binding AssetDetails}">
       <ListView.ItemTemplate>

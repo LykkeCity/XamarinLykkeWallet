@@ -33,22 +33,25 @@ namespace LykkeWallet.Pages
             AssetFrom = isInverted ? id.Substring(3) : id.Substring(0, 3);
             AssetTo = isInverted ? id.Substring(0, 3) : id.Substring(3);
 
-            if (isInverted)
-            {
-                _invertedAsk = ask;
-                _invertedBid = bid;
-                _invertedPercentage = percentage;
-            }
-            else
-            {
-                _regularAsk = ask;
-                _regularBid = bid;
-                _regularPercentage = percentage;
-            }
+            _regularAsk = ask != 0m ? Math.Round(ask, regularAccuracy) : 0m; ;
+            _regularBid = bid != 0m ? Math.Round(bid, regularAccuracy) : 0m; ; ;
+            _regularPercentage = percentage;
 
             IsInverted = isInverted;
+            
+            _invertedAsk = bid != 0m ? Math.Round(1m / bid, _invertedAccuracy) : 0m;
 
-            Evaluate();
+            _invertedBid = ask != 0m ? Math.Round(1m / ask, _invertedAccuracy) : 0m;
+
+            _invertedPercentage = (1m / (percentage / 100m + 1m) - 1m) * 100m; //TODO make sure _regularPercentage != 0
+            
+            Ask = IsInverted ? _invertedAsk : _regularAsk;
+
+            Bid = IsInverted ? _invertedBid : _regularBid;
+
+            Percentage = IsInverted ? _invertedPercentage : _regularPercentage;
+
+            ExchangeRate = Ask;
         }
 
         public string Id { internal set; get; }
@@ -185,6 +188,7 @@ namespace LykkeWallet.Pages
 
         private void Evaluate()
         {
+            /*
             if (IsInverted)
             {
                 _regularAsk = _invertedAsk != 0m ? Math.Round(1m / _invertedAsk, _regularAccuracy) : 0m;
@@ -202,7 +206,7 @@ namespace LykkeWallet.Pages
                 //_regularExchangeRate = _invertedExchangeRate != 0m ? Math.Round(1/ _invertedExchangeRate, _regularAccuracy) : 0m;
             }
             else
-            {
+            {*/
                 _invertedAsk = _regularAsk != 0m ? Math.Round(1m / _regularAsk, _invertedAccuracy) : 0m;
 
                 _invertedBid = _regularBid != 0m ? Math.Round(1m / _regularBid, _invertedAccuracy) : 0m;
@@ -216,7 +220,7 @@ namespace LykkeWallet.Pages
                 _invertedPercentage = (1m / (_regularPercentage / 100m + 1m) - 1m) * 100m; //TODO make sure _regularPercentage != 0
 
                 //_invertedExchangeRate = _regularExchangeRate != 0m ? Math.Round(1 / _regularExchangeRate, _invertedAccuracy) : 0m;
-            }
+            //}
 
             Ask = IsInverted ? _invertedAsk : _regularAsk;
 
@@ -270,7 +274,7 @@ namespace LykkeWallet.Pages
             Task.Run(() =>
             {
                 _assetsButtons = new List<Button>();
-
+                ViewModel.BaseAsset = WalletApiSingleton.Instance.GetBaseAsset().Result.Asset.Name;
                 var result = WalletApiSingleton.Instance.GetAllBaseAssets().Result;
                 foreach (var asset in result.Assets)
                 {
@@ -316,6 +320,7 @@ namespace LykkeWallet.Pages
             {
                 await WalletApiSingleton.Instance.SetBaseAsset(selectedAsset);
                 RefreshData(selectedAsset);
+                ViewModel.BaseAsset = selectedAsset;
             }
         }
 
@@ -326,11 +331,9 @@ namespace LykkeWallet.Pages
             Task.Run(() =>
             {
                 try
-                { 
+                {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        if (!isRefreshing)
-                            ;
                     });
                     var list = new ObservableCollection<ExhcangeRateModel>();
                     var assetsPairs = WalletApiSingleton.Instance.GetAssetPairRates().Result;
@@ -377,9 +380,11 @@ namespace LykkeWallet.Pages
             ((ListView)sender).SelectedItem = null;
 
             var detailsPage = new ExchangeDetailsPage();
+            detailsPage.SetExternalData(ViewModel.BaseAsset);
             detailsPage.RefreshButtons();
             detailsPage.RefreshData(s.Id);
             detailsPage.SetAssetDescription(s.Id);
+            detailsPage.SetSymbols(ViewModel.BaseAsset, s.Id.Replace(ViewModel.BaseAsset, ""));
             await Navigation.PushAsync(detailsPage);
         }
 

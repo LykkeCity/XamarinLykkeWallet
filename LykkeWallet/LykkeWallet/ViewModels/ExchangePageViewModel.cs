@@ -14,6 +14,7 @@ namespace LykkeWallet.ViewModels
     public class ExchangePageViewModel : INotifyPropertyChanged
     {
         private ObservableCollection<string> _baseAssets;
+        private string _baseAsset;
         private ObservableCollection<ExhcangeRateModel> _exchangeRates;
 
         public ObservableCollection<string> BaseAssets
@@ -24,6 +25,18 @@ namespace LykkeWallet.ViewModels
                 if (_baseAssets != value)
                 {
                     _baseAssets = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        public string BaseAsset
+        {
+            get { return _baseAsset; }
+            set
+            {
+                if(value != _baseAsset)
+                {
+                    _baseAsset = value;
                     OnPropertyChanged();
                 }
             }

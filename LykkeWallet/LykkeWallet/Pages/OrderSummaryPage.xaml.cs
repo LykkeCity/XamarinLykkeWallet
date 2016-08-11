@@ -111,5 +111,15 @@ namespace LykkeWallet.Pages
                     });
             });
         }
+
+        public void OnItemClicked(object sender, SelectedItemChangedEventArgs e)
+        {
+            var list = (ListView)sender;
+
+            if (list.SelectedItem != null)
+            {
+                list.SelectedItem = null;
+            }
+        }
     }
 }

@@ -167,6 +167,48 @@ namespace LykkeWallet.ViewModels
             }
         }
 
+        private string _baseAsset;
+        public string BaseAsset
+        {
+            get { return _baseAsset; }
+            set
+            {
+                if(value != _baseAsset)
+                {
+                    _baseAsset = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _baseAssetSymbol;
+        public string BaseAssetSymbol
+        {
+            get { return _baseAssetSymbol; }
+            set
+            {
+                if (value != _baseAssetSymbol)
+                {
+                    _baseAssetSymbol = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _secondaryAssetSymbol;
+        public string SecondaryAssetSymbol
+        {
+            get { return _secondaryAssetSymbol; }
+            set
+            {
+                if (value != _secondaryAssetSymbol)
+                {
+                    _secondaryAssetSymbol = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
